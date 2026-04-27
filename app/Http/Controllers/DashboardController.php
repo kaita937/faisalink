@@ -31,6 +31,13 @@ class DashboardController extends Controller
         return view('dashboard.peminjam', compact('user', 'totalAvailable', 'totalBooked', 'upcomingBookings', 'fasilitas'));
     }
 
+    public function facility()
+    {
+        $user = Auth::guard('peminjam')->user();
+        $fasilitas = Fasilitas_Kampus::all();
+        return view('facility', compact('user', 'fasilitas'));
+    }
+
     public function adminDashboard()
     {
         $admin = Auth::guard('admin')->user();

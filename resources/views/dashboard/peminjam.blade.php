@@ -43,6 +43,7 @@
             font-size: 1.5rem;
             font-weight: 900;
             color: #2e66ff;
+            text-decoration: none;
         }
 
         .logo-section img {
@@ -62,41 +63,68 @@
             color: #555;
             font-weight: 500;
             transition: color 0.2s;
+            position: relative;
         }
 
         .nav-links a:hover {
             color: #2e66ff;
         }
 
+        .nav-links a.active {
+            color: #2e66ff;
+            font-weight: 700;
+        }
+
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: #2e66ff;
+            border-radius: 2px;
+        }
+
         .search-box {
             position: relative;
-            width: 200px;
+            width: 240px;
         }
 
         .search-box input {
             width: 100%;
             padding: 10px 15px 10px 40px;
             border: 1px solid #ddd;
-            border-radius: 20px;
+            border-radius: 9999px;
             font-size: 0.9rem;
             outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
 
         .search-box input:focus {
             border-color: #2e66ff;
+            box-shadow: 0 0 0 3px rgba(46, 102, 255, 0.1);
         }
 
-        .search-box::before {
-            content: "🔍";
+        .search-box .search-icon {
             position: absolute;
-            left: 12px;
+            left: 14px;
             top: 50%;
             transform: translateY(-50%);
+            color: #999;
+            font-size: 0.95rem;
+            pointer-events: none;
         }
 
         .notification-icon {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             cursor: pointer;
+            color: #555;
+            transition: color 0.2s;
+        }
+
+        .notification-icon:hover {
+            color: #2e66ff;
         }
 
         /* Main Container */
@@ -335,6 +363,9 @@
             .nav-links {
                 gap: 15px;
                 font-size: 0.9rem;
+                order: 3;
+                width: 100%;
+                justify-content: center;
             }
 
             .categories-grid {
@@ -351,21 +382,22 @@
     <!-- Header -->
     <header>
         <div class="header-container">
-            <div class="logo-section">
+            <a href="{{ route('landing') }}" class="logo-section">
                 <img src="{{ asset('Icon/logo.png') }}" alt="Faisalink">
                 <span>Faisalink</span>
-            </div>
+            </a>
             <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#facilities">Facilities</a></li>
+                <li><a href="{{ route('dashboard.user') }}" class="active">Home</a></li>
+                <li><a href="{{ route('facility') }}">Facilities</a></li>
                 <li><a href="#booking">Booking</a></li>
                 <li><a href="#profile">Profile</a></li>
             </ul>
             <div style="display: flex; gap: 20px; align-items: center;">
                 <div class="search-box">
+                    <span class="search-icon">&#128269;</span>
                     <input type="text" placeholder="Search Facilities...">
                 </div>
-                <div class="notification-icon">🔔</div>
+                <div class="notification-icon">&#128276;</div>
             </div>
         </div>
     </header>

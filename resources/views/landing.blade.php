@@ -149,9 +149,8 @@
             <h1 class="brand-title">Faisalink</h1>
             <h2 class="brand-subtitle">Facilities Instant Access</h2>
             <div class="btn-wrapper">
-                <a href="{{ route('login') }}" class="btn-start">Get Started / Login</a>
+                <a href="{{ route('login') }}" class="btn-start">Explore Facilities</a>
             </div>
-        </div>
     </header>
 
     <!-- Bagian Bawah: Ilustrasi Gedung -->

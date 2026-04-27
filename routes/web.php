@@ -12,6 +12,8 @@ Route::get('/faisalink', function () {
     return view('landing');
 })->name('landing');
 
+Route::get('/facility', [DashboardController::class, 'facility'])->name('facility');
+
 Route::get('/login', function () {
     return view('login');
 })->name('login');
