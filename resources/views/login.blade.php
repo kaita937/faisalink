@@ -128,6 +128,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         .login-title {
@@ -140,12 +141,12 @@
 
         .form-group {
             width: 100%;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .form-control {
             width: 100%;
-            padding: 10px 15px;
+            padding: 12px 15px;
             border: 1px solid #dcdcdc;
             border-radius: 8px;
             font-size: 0.95rem;
@@ -225,7 +226,7 @@
         <!-- Logo & Title -->
         <div class="brand-section">
             <div class="logo-icon">
-                <img src="/faisalink/public/Icon/logo.png" alt="Logo Faisalink">
+                <img src="{{ asset('Icon/logo.png') }}" alt="Logo Faisalink">
             </div>
             <div class="text-container">
                 <h1 class="brand-title">Faisalink</h1>
@@ -238,12 +239,11 @@
             <h2 class="login-title">Welcome</h2>
             <form action="{{ route('login.post') }}" method="POST" style="width: 100%;">
                 @csrf
-
-                @if($errors->has('loginError'))
-                <div style="color: #d93025; background-color: #fce8e6; padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 0.85rem;">
-                    {{ $errors->first('loginError') }}
+                @error('loginError')
+                <div style="color: #d93025; background-color: #fce8e6; padding: 12px 15px; border-radius: 8px; margin-bottom: 20px; font-size: 0.85rem; border-left: 4px solid #d93025;">
+                    {{ $message }}
                 </div>
-                @endif
+                @enderror
                 
                 <div class="form-group">
                     <select name="role" class="form-control" required>
@@ -263,6 +263,9 @@
 
                 <button type="submit" class="btn-submit">Sign In</button>
             </form>
+            <div style="margin-top: 20px;">
+                <a href="{{ route('landing') }}" style="color: #2e66ff; text-decoration: none; font-size: 0.9rem;">Back to Home</a>
+            </div>
         </div>
     </div>
 
