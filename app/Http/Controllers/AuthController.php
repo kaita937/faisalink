@@ -21,16 +21,15 @@ class AuthController extends Controller
         // Memilih guard berdasarkan role
         $guard = $request->role === 'admin' ? 'admin' : 'peminjam';
 
-        // Mencoba login (asumsi password di DB menggunakan bcrypt/Hash standar Laravel)
-        // Jika password di database berupa Plain Text (tidak dienkripsi), fungsi attempt() ini akan selalu GAGAL.
+        // Mencoba login
         if (Auth::guard($guard)->attempt($credentials)) {
             // Jika sukses
             $request->session()->regenerate();
 
             if ($guard === 'admin') {
-                return redirect()->intended('/dashboard/admin');
+                return redirect()->route('dashboard.admin');
             } else {
-                return redirect()->intended('/dashboard/user');
+                return redirect()->route('dashboard.user');
             }
         }
 
