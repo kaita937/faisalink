@@ -38,6 +38,13 @@ class DashboardController extends Controller
         return view('facility', compact('user', 'fasilitas'));
     }
 
+    public function facilityDetail($id)
+    {
+        $user = Auth::guard('peminjam')->user();
+        $fasilitas = Fasilitas_Kampus::with('perlengkapan')->findOrFail($id);
+        return view('facility_detail', compact('user', 'fasilitas'));
+    }
+
     public function adminDashboard()
     {
         $admin = Auth::guard('admin')->user();

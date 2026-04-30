@@ -24,3 +24,4 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // Rute Dashboard
 Route::middleware('auth:admin')->get('/dashboard/admin', [DashboardController::class, 'adminDashboard'])->name('dashboard.admin');
 Route::middleware('auth:peminjam')->get('/dashboard/user', [DashboardController::class, 'peminjamDashboard'])->name('dashboard.user');
+Route::get('/facility/{id}', [DashboardController::class, 'facilityDetail'])->name('facility.detail');
