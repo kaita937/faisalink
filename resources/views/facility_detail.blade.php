@@ -390,7 +390,7 @@
                         @foreach($fasilitas->perlengkapan as $item)
                             <li class="equipment-item">
                                 &#10004; {{ $item->nama_perlengkapan }}
-                                <span class="qty">{{ $item->jumlah_perlengkapan ?? 1 }}x</span>
+                                <span class="qty">{{ $item->jumlah ?? 1 }}x</span>
                             </li>
                         @endforeach
                     </ul>
@@ -400,7 +400,7 @@
 
                 <div class="booking-action">
                     @if(strtolower($fasilitas->status_fasilitas) == 'tersedia')
-                        <button class="btn-book">Book This Facility</button>
+                        <a href="{{ route('booking.form', $fasilitas->id_fasilitas) }}" class="btn-book">Book This Facility</a>
                     @else
                         <button class="btn-book disabled" disabled>Currently Unavailable</button>
                     @endif

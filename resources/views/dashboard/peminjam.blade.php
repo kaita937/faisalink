@@ -317,17 +317,17 @@
             color: #856404;
         }
 
-        .status-approved {
+        .status-disetujui {
             background-color: #d4edda;
             color: #155724;
         }
 
-        .status-completed {
+        .status-selesai {
             background-color: #d1ecf1;
             color: #0c5460;
         }
 
-        .status-rejected {
+        .status-ditolak {
             background-color: #f8d7da;
             color: #721c24;
         }
