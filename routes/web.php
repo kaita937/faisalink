@@ -30,5 +30,6 @@ Route::get('/facility/{id}', [DashboardController::class, 'facilityDetail'])->na
 Route::middleware('auth:peminjam')->get('/booking/{id}', [\App\Http\Controllers\BookingController::class, 'showBookingForm'])->name('booking.form');
 Route::middleware('auth:peminjam')->post('/booking', [\App\Http\Controllers\BookingController::class, 'submitBooking'])->name('booking.submit');
 // Rute Admin Booking
+Route::middleware('auth:admin')->get('/admin/booking/{id}', [\App\Http\Controllers\AdminController::class, 'bookingDetail'])->name('admin.booking.detail');
 Route::middleware('auth:admin')->post('/admin/booking/{id}/approve', [\App\Http\Controllers\AdminController::class, 'approveBooking'])->name('admin.booking.approve');
 Route::middleware('auth:admin')->post('/admin/booking/{id}/reject', [\App\Http\Controllers\AdminController::class, 'rejectBooking'])->name('admin.booking.reject');
