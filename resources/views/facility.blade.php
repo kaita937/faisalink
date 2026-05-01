@@ -523,7 +523,7 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <a href="#" class="btn-detail">Detail</a>
+                        <a href="{{ route('facility.detail', $f->id_fasilitas) }}" class="btn-detail">Detail</a>
                     </div>
                 </div>
             @empty
