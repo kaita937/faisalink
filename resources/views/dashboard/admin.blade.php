@@ -290,14 +290,7 @@
                             @endif
                         </div>
                         <div class="request-actions">
-                            <form action="{{ route('admin.booking.approve', $booking->id_peminjaman) }}" method="POST" style="display:inline;">
-                                @csrf
-                                <button type="submit" class="btn btn-approve">Setujui</button>
-                            </form>
-                            <form action="{{ route('admin.booking.reject', $booking->id_peminjaman) }}" method="POST" style="display:inline;">
-                                @csrf
-                                <button type="submit" class="btn btn-reject" onclick="return confirm('Yakin ingin menolak pengajuan ini?');">Tolak</button>
-                            </form>
+                            <a href="{{ route('admin.booking.detail', $booking->id_peminjaman) }}" class="btn" style="background-color: #2e66ff; color: white;">Lihat Detail</a>
                         </div>
                     </div>
                     @endforeach

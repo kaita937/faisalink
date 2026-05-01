@@ -9,6 +9,17 @@ use Illuminate\Support\Facades\Auth;
 class AdminController extends Controller
 {
     /**
+     * Menampilkan detail peminjaman
+     */
+    public function bookingDetail($id)
+    {
+        $admin = Auth::guard('admin')->user();
+        $booking = Peminjaman::with(['peminjam', 'fasilitas'])->findOrFail($id);
+        
+        return view('dashboard.booking_detail', compact('admin', 'booking'));
+    }
+
+    /**
      * Setujui peminjaman
      */
     public function approveBooking($id)
