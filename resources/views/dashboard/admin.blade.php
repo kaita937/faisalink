@@ -251,6 +251,12 @@
     <div class="main-container">
         <h1>📊 Admin Dashboard</h1>
 
+        @if(session('success'))
+            <div style="background-color: #d4edda; color: #155724; padding: 15px; border-radius: 8px; margin-bottom: 25px; border-left: 4px solid #28a745;">
+                {{ session('success') }}
+            </div>
+        @endif
+
         <!-- Stats -->
         <div class="stats-grid">
             <div class="stat-card">
@@ -279,10 +285,19 @@
                             <p><strong>Keperluan:</strong> {{ $booking->keperluan }}</p>
                             <p><strong>Tanggal:</strong> {{ \Carbon\Carbon::parse($booking->tanggal_peminjaman)->format('d/m/Y') }} | <strong>Waktu:</strong> {{ $booking->jam_mulai }} - {{ $booking->jam_selesai }}</p>
                             <p><strong>Lokasi:</strong> {{ $booking->fasilitas->lokasi_fasilitas }}</p>
+                            @if($booking->administrasi_peminjaman)
+                                <p><a href="{{ asset('storage/' . $booking->administrasi_peminjaman) }}" target="_blank" style="color:#2e66ff; text-decoration:none; font-weight:600;">&#128194; Lihat Proposal</a></p>
+                            @endif
                         </div>
                         <div class="request-actions">
-                            <button class="btn btn-approve" onclick="alert('Fitur approval akan diintegrasikan')">Setujui</button>
-                            <button class="btn btn-reject" onclick="alert('Fitur rejection akan diintegrasikan')">Tolak</button>
+                            <form action="{{ route('admin.booking.approve', $booking->id_peminjaman) }}" method="POST" style="display:inline;">
+                                @csrf
+                                <button type="submit" class="btn btn-approve">Setujui</button>
+                            </form>
+                            <form action="{{ route('admin.booking.reject', $booking->id_peminjaman) }}" method="POST" style="display:inline;">
+                                @csrf
+                                <button type="submit" class="btn btn-reject" onclick="return confirm('Yakin ingin menolak pengajuan ini?');">Tolak</button>
+                            </form>
                         </div>
                     </div>
                     @endforeach
