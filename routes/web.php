@@ -24,6 +24,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // Rute Dashboard
 Route::middleware('auth:admin')->get('/dashboard/admin', [DashboardController::class, 'adminDashboard'])->name('dashboard.admin');
 Route::middleware('auth:peminjam')->get('/dashboard/user', [DashboardController::class, 'peminjamDashboard'])->name('dashboard.user');
+Route::middleware('auth:peminjam')->get('/profile', [DashboardController::class, 'profile'])->name('profile');
+Route::middleware('auth:peminjam')->post('/profile', [DashboardController::class, 'updateProfile'])->name('profile.update');
 Route::get('/facility/{id}', [DashboardController::class, 'facilityDetail'])->name('facility.detail');
 
 // Rute Booking

@@ -121,10 +121,173 @@
             cursor: pointer;
             color: #555;
             transition: color 0.2s;
+            background: none;
+            border: none;
+            position: relative;
+            padding: 4px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .notification-icon:hover {
             color: #2e66ff;
+        }
+
+        .notification-wrapper {
+            position: relative;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            min-width: 18px;
+            height: 18px;
+            padding: 0 5px;
+            background: #ff3b30;
+            color: white;
+            border-radius: 999px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        .notification-panel {
+            position: absolute;
+            right: 0;
+            top: calc(100% + 12px);
+            width: 360px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 18px 40px rgba(20, 32, 60, 0.18);
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            opacity: 0;
+            transform: translateY(-6px);
+            pointer-events: none;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            z-index: 200;
+        }
+
+        .notification-panel.open {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .notification-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px 8px 16px;
+        }
+
+        .notification-title {
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .notification-action {
+            font-size: 0.8rem;
+            color: #2e66ff;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px 6px;
+            font-weight: 600;
+        }
+
+        .notification-list {
+            max-height: 380px;
+            overflow-y: auto;
+            padding: 6px 10px 14px 10px;
+        }
+
+        .notification-item {
+            display: flex;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 14px;
+            text-decoration: none;
+            color: #1f2937;
+            border: 1px solid transparent;
+            transition: background 0.2s ease, border 0.2s ease;
+            margin-bottom: 10px;
+        }
+
+        .notification-item:hover {
+            background: #f7f8fb;
+            border-color: rgba(46, 102, 255, 0.12);
+        }
+
+        .notification-item.read {
+            opacity: 0.6;
+        }
+
+        .notification-item.success {
+            border-left: 5px solid #2e66ff;
+        }
+
+        .notification-item.warning {
+            border-left: 5px solid #ffb020;
+        }
+
+        .notification-item.info {
+            border-left: 5px solid #60a5fa;
+        }
+
+        .notification-icon-bubble {
+            width: 44px;
+            height: 44px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .notification-icon-bubble.success {
+            background: #e8f1ff;
+            color: #2e66ff;
+        }
+
+        .notification-icon-bubble.warning {
+            background: #fff4d6;
+            color: #d97706;
+        }
+
+        .notification-icon-bubble.info {
+            background: #e8f5ff;
+            color: #2563eb;
+        }
+
+        .notification-text h4 {
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+            font-weight: 700;
+        }
+
+        .notification-text p {
+            font-size: 0.82rem;
+            color: #6b7280;
+            line-height: 1.4;
+        }
+
+        .notification-time {
+            font-size: 0.75rem;
+            color: #9ca3af;
+            margin-top: 6px;
+        }
+
+        .notification-empty {
+            text-align: center;
+            padding: 24px 16px;
+            color: #9ca3af;
+            font-size: 0.9rem;
         }
 
         /* Main Container */
@@ -375,6 +538,11 @@
             .booking-card {
                 grid-template-columns: 1fr;
             }
+
+            .notification-panel {
+                width: min(92vw, 360px);
+                right: -10px;
+            }
         }
     </style>
 </head>
@@ -390,14 +558,85 @@
                 <li><a href="{{ route('dashboard.user') }}" class="active">Home</a></li>
                 <li><a href="{{ route('facility') }}">Facilities</a></li>
                 <li><a href="#booking">Booking</a></li>
-                <li><a href="#profile">Profile</a></li>
+                <li><a href="{{ route('profile') }}">Profile</a></li>
             </ul>
             <div style="display: flex; gap: 20px; align-items: center;">
                 <div class="search-box">
                     <span class="search-icon">&#128269;</span>
                     <input type="text" placeholder="Search Facilities...">
                 </div>
-                <div class="notification-icon">&#128276;</div>
+                @php
+                    $notifications = $notifications ?? [
+                        [
+                            'type' => 'success',
+                            'title' => 'Pengajuan dibuat',
+                            'message' => 'Pengajuan peminjaman Auditorium 1 berhasil dibuat.',
+                            'time' => 'baru saja',
+                            'read' => false,
+                            'url' => '#'
+                        ],
+                        [
+                            'type' => 'warning',
+                            'title' => 'Pengajuan dibatalkan',
+                            'message' => 'Pengajuan Lab Multimedia dibatalkan oleh admin.',
+                            'time' => '2 jam lalu',
+                            'read' => false,
+                            'url' => '#'
+                        ],
+                        [
+                            'type' => 'info',
+                            'title' => 'Info jadwal',
+                            'message' => 'Jadwal Anda diubah ke 13:00 - 15:00.',
+                            'time' => 'kemarin',
+                            'read' => true,
+                            'url' => '#'
+                        ]
+                    ];
+                    $unreadCount = 0;
+                    foreach ($notifications as $item) {
+                        if (empty($item['read'])) {
+                            $unreadCount++;
+                        }
+                    }
+                @endphp
+                <div class="notification-wrapper">
+                    <button class="notification-icon" id="notificationToggle" type="button" aria-label="Notifications">
+                        &#128276;
+                        <span class="notification-badge" id="notificationCount" style="display: {{ $unreadCount > 0 ? 'inline-flex' : 'none' }};">{{ $unreadCount }}</span>
+                    </button>
+                    <div class="notification-panel" id="notificationPanel">
+                        <div class="notification-header">
+                            <div class="notification-title">Notification</div>
+                            <button class="notification-action" id="notificationMarkAll" type="button">Mark all as read</button>
+                        </div>
+                        <div class="notification-list" id="notificationList">
+                            @forelse ($notifications as $notification)
+                                @php
+                                    $type = $notification['type'] ?? 'info';
+                                    $isRead = !empty($notification['read']);
+                                @endphp
+                                <a href="{{ $notification['url'] ?? '#' }}" class="notification-item {{ $type }} {{ $isRead ? 'read' : '' }}" data-read="{{ $isRead ? '1' : '0' }}">
+                                    <div class="notification-icon-bubble {{ $type }}">
+                                        @if ($type === 'success')
+                                            &#10003;
+                                        @elseif ($type === 'warning')
+                                            &#9200;
+                                        @else
+                                            &#8505;
+                                        @endif
+                                    </div>
+                                    <div class="notification-text">
+                                        <h4>{{ $notification['title'] ?? 'Update' }}</h4>
+                                        <p>{{ $notification['message'] ?? '-' }}</p>
+                                        <div class="notification-time">{{ $notification['time'] ?? 'baru saja' }}</div>
+                                    </div>
+                                </a>
+                            @empty
+                                <div class="notification-empty">Belum ada notifikasi.</div>
+                            @endforelse
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
@@ -498,5 +737,64 @@
             </form>
         </div>
     </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const notificationToggle = document.getElementById('notificationToggle');
+            const notificationPanel = document.getElementById('notificationPanel');
+            const notificationCount = document.getElementById('notificationCount');
+            const notificationMarkAll = document.getElementById('notificationMarkAll');
+            const notificationList = document.getElementById('notificationList');
+
+            function updateNotificationCount() {
+                if (!notificationCount || !notificationList) {
+                    return;
+                }
+
+                const unreadItems = notificationList.querySelectorAll('.notification-item:not(.read)');
+                const unreadCount = unreadItems.length;
+                notificationCount.textContent = unreadCount;
+                notificationCount.style.display = unreadCount > 0 ? 'inline-flex' : 'none';
+            }
+
+            if (notificationToggle && notificationPanel) {
+                notificationToggle.addEventListener('click', function(event) {
+                    event.stopPropagation();
+                    notificationPanel.classList.toggle('open');
+                });
+
+                document.addEventListener('click', function(event) {
+                    if (!notificationPanel.contains(event.target) && !notificationToggle.contains(event.target)) {
+                        notificationPanel.classList.remove('open');
+                    }
+                });
+            }
+
+            if (notificationList) {
+                notificationList.addEventListener('click', function(event) {
+                    const item = event.target.closest('.notification-item');
+                    if (item) {
+                        item.classList.add('read');
+                        updateNotificationCount();
+                    }
+                });
+            }
+
+            if (notificationMarkAll) {
+                notificationMarkAll.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    if (!notificationList) {
+                        return;
+                    }
+                    notificationList.querySelectorAll('.notification-item').forEach(item => {
+                        item.classList.add('read');
+                    });
+                    updateNotificationCount();
+                });
+            }
+
+            updateNotificationCount();
+        });
+    </script>
 </body>
 </html>
