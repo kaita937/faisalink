@@ -19,7 +19,8 @@ class Peminjam extends Authenticatable
         'username',
         'email',
         'contact',
-        'password'
+        'password',
+        'avatar_path'
     ];
 
     protected $hidden = [
