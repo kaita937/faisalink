@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile - Faisalink</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/dashboard-peminjam.css') }}">
     <style>
@@ -339,38 +340,8 @@
                     <input type="text" placeholder="Search Facilities...">
                 </div>
                 @php
-                    $notifications = $notifications ?? [
-                        [
-                            'type' => 'success',
-                            'title' => 'Pengajuan disetujui',
-                            'message' => 'Booking Lab Komputer 1 untuk 30 Oktober telah disetujui.',
-                            'time' => '2 jam lalu',
-                            'read' => false,
-                            'url' => '#'
-                        ],
-                        [
-                            'type' => 'info',
-                            'title' => 'Review terkirim',
-                            'message' => 'Review Anda untuk ruang meeting A telah dikirim.',
-                            'time' => '10 jam lalu',
-                            'read' => false,
-                            'url' => '#'
-                        ],
-                        [
-                            'type' => 'warning',
-                            'title' => 'Pengingat',
-                            'message' => 'Jangan lupa check-in untuk seminar besok jam 14:00.',
-                            'time' => '1 minggu lalu',
-                            'read' => true,
-                            'url' => '#'
-                        ]
-                    ];
-                    $unreadCount = 0;
-                    foreach ($notifications as $item) {
-                        if (empty($item['read'])) {
-                            $unreadCount++;
-                        }
-                    }
+                    $notifications = $notifications ?? collect();
+                    $unreadCount = $unreadCount ?? $notifications->whereNull('read_at')->count();
                 @endphp
                 <div class="notification-wrapper">
                     <button class="notification-icon" id="notificationToggle" type="button" aria-label="Notifications">
@@ -385,10 +356,11 @@
                         <div class="notification-list" id="notificationList">
                             @forelse ($notifications as $notification)
                                 @php
-                                    $type = $notification['type'] ?? 'info';
-                                    $isRead = !empty($notification['read']);
+                                    $type = $notification->type ?? 'info';
+                                    $isRead = !empty($notification->read_at);
+                                    $notificationUrl = $notification->url ?: '#';
                                 @endphp
-                                <a href="{{ $notification['url'] ?? '#' }}" class="notification-item {{ $type }} {{ $isRead ? 'read' : '' }}" data-read="{{ $isRead ? '1' : '0' }}">
+                                <a href="{{ $notificationUrl }}" class="notification-item {{ $type }} {{ $isRead ? 'read' : '' }}" data-id="{{ $notification->id }}">
                                     <div class="notification-icon-bubble {{ $type }}">
                                         @if ($type === 'success')
                                             &#10003;
@@ -399,9 +371,9 @@
                                         @endif
                                     </div>
                                     <div class="notification-text">
-                                        <h4>{{ $notification['title'] ?? 'Update' }}</h4>
-                                        <p>{{ $notification['message'] ?? '-' }}</p>
-                                        <div class="notification-time">{{ $notification['time'] ?? 'baru saja' }}</div>
+                                        <h4>{{ $notification->title ?? 'Update' }}</h4>
+                                        <p>{{ $notification->message ?? '-' }}</p>
+                                        <div class="notification-time">{{ optional($notification->created_at)->diffForHumans() ?? 'baru saja' }}</div>
                                     </div>
                                 </a>
                             @empty
@@ -664,6 +636,7 @@
             const notificationCount = document.getElementById('notificationCount');
             const notificationMarkAll = document.getElementById('notificationMarkAll');
             const notificationList = document.getElementById('notificationList');
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
             function updateNotificationCount() {
                 if (!notificationCount || !notificationList) return;
@@ -690,8 +663,26 @@
                 notificationList.addEventListener('click', function(event) {
                     const item = event.target.closest('.notification-item');
                     if (item) {
-                        item.classList.add('read');
-                        updateNotificationCount();
+                        const notificationId = item.dataset.id;
+                        const targetUrl = item.getAttribute('href');
+                        if (!notificationId || !csrfToken) {
+                            return;
+                        }
+
+                        event.preventDefault();
+                        fetch(`/notifications/${notificationId}/read`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': csrfToken
+                            }
+                        }).finally(() => {
+                            item.classList.add('read');
+                            updateNotificationCount();
+                            if (targetUrl && targetUrl !== '#') {
+                                window.location.href = targetUrl;
+                            }
+                        });
                     }
                 });
             }
@@ -699,9 +690,19 @@
             if (notificationMarkAll) {
                 notificationMarkAll.addEventListener('click', function(event) {
                     event.preventDefault();
-                    if (!notificationList) return;
-                    notificationList.querySelectorAll('.notification-item').forEach(item => item.classList.add('read'));
-                    updateNotificationCount();
+                    if (!notificationList || !csrfToken) {
+                        return;
+                    }
+                    fetch('/notifications/read-all', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken
+                        }
+                    }).finally(() => {
+                        notificationList.querySelectorAll('.notification-item').forEach(item => item.classList.add('read'));
+                        updateNotificationCount();
+                    });
                 });
             }
 

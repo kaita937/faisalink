@@ -26,4 +26,9 @@ class Peminjam extends Authenticatable
     protected $hidden = [
         'password',
     ];
+
+    public function notifications()
+    {
+        return $this->hasMany(PeminjamNotification::class, 'id_peminjam', 'id_peminjam');
+    }
 }

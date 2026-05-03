@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BookingViewController;
+use App\Http\Controllers\NotificationController;
 
 Route::get('/', function () {
     return view('landing');
@@ -42,6 +43,8 @@ Route::middleware('auth:admin')->post('/admin/booking/{id}/reject', [\App\Http\C
 Route::middleware('auth:peminjam')->get('/booking_view', [BookingViewController::class, 'bookingInfo'])->name('booking_view');
 Route::middleware('auth:peminjam')->get('/booking_view/{id}', [BookingViewController::class, 'detail'])->name('booking.detail');
 Route::middleware('auth:peminjam')->delete('/booking/{id}', [BookingViewController::class, 'destroy'])->name('booking.destroy');
+Route::middleware('auth:peminjam')->post('/notifications/{id}/read', [NotificationController::class, 'markRead'])->name('notifications.read');
+Route::middleware('auth:peminjam')->post('/notifications/read-all', [NotificationController::class, 'markAllRead'])->name('notifications.readAll');
 // Rute Admin Fasilitas
 Route::middleware('auth:admin')->get('/admin/facilities', [\App\Http\Controllers\AdminController::class, 'facilitiesIndex'])->name('admin.facilities.index');
 Route::middleware('auth:admin')->get('/admin/facilities/create', [\App\Http\Controllers\AdminController::class, 'facilitiesCreate'])->name('admin.facilities.create');

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Booking User</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/booking-view.css') }}">
 
@@ -26,7 +27,49 @@
                     <span class="search-icon">&#128269;</span>
                     <input type="text" id="searchInput" placeholder="Search Facilities...">
                 </div>
-                <div class="notification-icon">&#128276;</div>
+                @php
+                    $notifications = $notifications ?? collect();
+                    $unreadCount = $unreadCount ?? $notifications->whereNull('read_at')->count();
+                @endphp
+                <div class="notification-wrapper">
+                    <button class="notification-icon" id="notificationToggle" type="button" aria-label="Notifications">
+                        &#128276;
+                        <span class="notification-badge" id="notificationCount" style="display: {{ $unreadCount > 0 ? 'inline-flex' : 'none' }};">{{ $unreadCount }}</span>
+                    </button>
+                    <div class="notification-panel" id="notificationPanel">
+                        <div class="notification-header">
+                            <div class="notification-title">Notification</div>
+                            <button class="notification-action" id="notificationMarkAll" type="button">Mark all as read</button>
+                        </div>
+                        <div class="notification-list" id="notificationList">
+                            @forelse ($notifications as $notification)
+                                @php
+                                    $type = $notification->type ?? 'info';
+                                    $isRead = !empty($notification->read_at);
+                                    $notificationUrl = $notification->url ?: '#';
+                                @endphp
+                                <a href="{{ $notificationUrl }}" class="notification-item {{ $type }} {{ $isRead ? 'read' : '' }}" data-id="{{ $notification->id }}">
+                                    <div class="notification-icon-bubble {{ $type }}">
+                                        @if ($type === 'success')
+                                            &#10003;
+                                        @elseif ($type === 'warning')
+                                            &#9200;
+                                        @else
+                                            &#8505;
+                                        @endif
+                                    </div>
+                                    <div class="notification-text">
+                                        <h4>{{ $notification->title ?? 'Update' }}</h4>
+                                        <p>{{ $notification->message ?? '-' }}</p>
+                                        <div class="notification-time">{{ optional($notification->created_at)->diffForHumans() ?? 'baru saja' }}</div>
+                                    </div>
+                                </a>
+                            @empty
+                                <div class="notification-empty">Belum ada notifikasi.</div>
+                            @endforelse
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
@@ -204,6 +247,12 @@
     document.addEventListener('DOMContentLoaded', () => {
         const filterButtons = document.querySelectorAll('.filter-btn');
         const bookingCards = document.querySelectorAll('.booking-card');
+        const notificationToggle = document.getElementById('notificationToggle');
+        const notificationPanel = document.getElementById('notificationPanel');
+        const notificationCount = document.getElementById('notificationCount');
+        const notificationMarkAll = document.getElementById('notificationMarkAll');
+        const notificationList = document.getElementById('notificationList');
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
         filterButtons.forEach((button) => {
             button.addEventListener('click', () => {
@@ -219,6 +268,81 @@
                 });
             });
         });
+
+        function updateNotificationCount() {
+            if (!notificationCount || !notificationList) {
+                return;
+            }
+
+            const unreadItems = notificationList.querySelectorAll('.notification-item:not(.read)');
+            const unreadCount = unreadItems.length;
+            notificationCount.textContent = unreadCount;
+            notificationCount.style.display = unreadCount > 0 ? 'inline-flex' : 'none';
+        }
+
+        if (notificationToggle && notificationPanel) {
+            notificationToggle.addEventListener('click', function(event) {
+                event.stopPropagation();
+                notificationPanel.classList.toggle('open');
+            });
+
+            document.addEventListener('click', function(event) {
+                if (!notificationPanel.contains(event.target) && !notificationToggle.contains(event.target)) {
+                    notificationPanel.classList.remove('open');
+                }
+            });
+        }
+
+        if (notificationList) {
+            notificationList.addEventListener('click', function(event) {
+                const item = event.target.closest('.notification-item');
+                if (item) {
+                    const notificationId = item.dataset.id;
+                    const targetUrl = item.getAttribute('href');
+                    if (!notificationId || !csrfToken) {
+                        return;
+                    }
+
+                    event.preventDefault();
+                    fetch(`/notifications/${notificationId}/read`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken
+                        }
+                    }).finally(() => {
+                        item.classList.add('read');
+                        updateNotificationCount();
+                        if (targetUrl && targetUrl !== '#') {
+                            window.location.href = targetUrl;
+                        }
+                    });
+                }
+            });
+        }
+
+        if (notificationMarkAll) {
+            notificationMarkAll.addEventListener('click', function(event) {
+                event.preventDefault();
+                if (!notificationList || !csrfToken) {
+                    return;
+                }
+                fetch('/notifications/read-all', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    }
+                }).finally(() => {
+                    notificationList.querySelectorAll('.notification-item').forEach(item => {
+                        item.classList.add('read');
+                    });
+                    updateNotificationCount();
+                });
+            });
+        }
+
+        updateNotificationCount();
     });
 </script>
 </body>
