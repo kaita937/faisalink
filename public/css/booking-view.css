@@ -295,6 +295,7 @@ header {
         cursor: pointer;
         background: transparent;
         transition: 0.2s;
+        text-decoration: none;
     }
     .btn-outline-blue {
         border: 1px solid #3b82f6;
