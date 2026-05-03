@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\BookingViewController;
 
 Route::get('/', function () {
     return view('landing');
@@ -31,11 +32,15 @@ Route::get('/facility/{id}', [DashboardController::class, 'facilityDetail'])->na
 // Rute Booking
 Route::middleware('auth:peminjam')->get('/booking/{id}', [\App\Http\Controllers\BookingController::class, 'showBookingForm'])->name('booking.form');
 Route::middleware('auth:peminjam')->post('/booking', [\App\Http\Controllers\BookingController::class, 'submitBooking'])->name('booking.submit');
+
 // Rute Admin Booking
 Route::middleware('auth:admin')->get('/admin/booking/{id}', [\App\Http\Controllers\AdminController::class, 'bookingDetail'])->name('admin.booking.detail');
 Route::middleware('auth:admin')->post('/admin/booking/{id}/approve', [\App\Http\Controllers\AdminController::class, 'approveBooking'])->name('admin.booking.approve');
 Route::middleware('auth:admin')->post('/admin/booking/{id}/reject', [\App\Http\Controllers\AdminController::class, 'rejectBooking'])->name('admin.booking.reject');
 
+//rute booking user
+Route::middleware('auth:peminjam')->get('/booking_view', [BookingViewController::class, 'bookingInfo'])->name('booking_view');
+Route::middleware('auth:peminjam')->delete('/booking/{id}', [BookingViewController::class, 'destroy'])->name('booking.destroy');
 // Rute Admin Fasilitas
 Route::middleware('auth:admin')->get('/admin/facilities', [\App\Http\Controllers\AdminController::class, 'facilitiesIndex'])->name('admin.facilities.index');
 Route::middleware('auth:admin')->get('/admin/facilities/create', [\App\Http\Controllers\AdminController::class, 'facilitiesCreate'])->name('admin.facilities.create');
