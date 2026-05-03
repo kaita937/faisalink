@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Booking User</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/booking-view.css') }}">
 
@@ -74,10 +75,11 @@
             </div>
 
             <div class="card-footer">
-                <form action="{{ route('booking.destroy', $booking->id_peminjaman) }}" method="POST" onsubmit="return confirm('Hapus booking ini?');">
+                <a href="{{ route('booking.detail', $booking->id_peminjaman) }}" class="btn btn-outline-blue">Detail</a>
+                <form action="{{ route('booking.destroy', $booking->id_peminjaman) }}" method="POST">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-outline-red">Cancel</button>
+                    <button type="button" class="btn btn-outline-red" data-confirm="Apakah Anda yakin ingin membatalkan booking ini?">Cancel</button>
                 </form>
             </div>
         </div>
@@ -119,6 +121,10 @@
                     </svg>
                     <span>{{ $booking->fasilitas->lokasi_fasilitas }}</span>
                 </div>
+            </div>
+
+            <div class="card-footer">
+                <a href="{{ route('booking.detail', $booking->id_peminjaman) }}" class="btn btn-outline-blue">Detail</a>
             </div>
         </div>
     @endforeach
@@ -165,6 +171,10 @@
                     <span>{{ $booking->fasilitas->lokasi_fasilitas }}</span>
                 </div>
             </div>
+
+            <div class="card-footer">
+                <a href="{{ route('booking.detail', $booking->id_peminjaman) }}" class="btn btn-outline-blue">Detail</a>
+            </div>
         </div>
     @endforeach
 
@@ -180,6 +190,7 @@
         const notificationCount = document.getElementById('notificationCount');
         const notificationMarkAll = document.getElementById('notificationMarkAll');
         const notificationList = document.getElementById('notificationList');
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
         filterButtons.forEach((button) => {
             button.addEventListener('click', () => {

@@ -16,8 +16,14 @@ class DashboardController extends Controller
         
         // Ambil statistik
         $totalFasilitas = Fasilitas_Kampus::count();
-        $totalBooked = Peminjaman::where('status_peminjaman', '!=', 'Ditolak')->count();
-        $totalAvailable = $totalFasilitas - $totalBooked;
+        $today = now()->toDateString();
+        
+        $totalBooked = Peminjaman::where('id_peminjam', $user->id_peminjam)
+            ->whereIn('status_peminjaman', ['Disetujui', 'Pending'])
+            ->where('tanggal_peminjaman', '>=', $today)
+            ->count();
+            
+        $totalAvailable = max(0, $totalFasilitas - $totalBooked);
         
         // Ambil upcoming bookings
         $upcomingBookings = Peminjaman::with('fasilitas')

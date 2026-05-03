@@ -251,6 +251,10 @@ header {
 
 .notification-time {
     font-size: 0.75rem;
+      color: #6b7280;
+}
+
+
     color: #9ca3af;
     white-space: nowrap;
 }
@@ -260,10 +264,12 @@ header {
     color: #4b5563;
 }
 
+
 .notification-empty {
-    padding: 20px 16px;
+    padding: 18px 16px;
     text-align: center;
-    color: #9ca3af;
+    color: #9aa0a6;
+
     font-size: 0.9rem;
 }
 
@@ -443,6 +449,7 @@ header {
         cursor: pointer;
         background: transparent;
         transition: 0.2s;
+        text-decoration: none;
     }
     .btn-outline-blue {
         border: 1px solid #3b82f6;
