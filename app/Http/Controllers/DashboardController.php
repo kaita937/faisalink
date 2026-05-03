@@ -18,17 +18,12 @@ class DashboardController extends Controller
         $totalFasilitas = Fasilitas_Kampus::count();
         $today = now()->toDateString();
         
-        // Hitung fasilitas yang benar-benar tersedia (Status 'Tersedia' dan tidak ada peminjaman disetujui hari ini)
-        $totalAvailable = Fasilitas_Kampus::where('status_fasilitas', 'Tersedia')
-            ->whereNotIn('id_fasilitas', function($query) use ($today) {
-                $query->select('id_fasilitas')
-                      ->from('Peminjaman')
-                      ->where('tanggal_peminjaman', $today)
-                      ->where('status_peminjaman', 'Disetujui');
-            })
+        $totalBooked = Peminjaman::where('id_peminjam', $user->id_peminjam)
+            ->whereIn('status_peminjaman', ['Disetujui', 'Pending'])
+            ->where('tanggal_peminjaman', '>=', $today)
             ->count();
             
-        $totalBooked = $totalFasilitas - $totalAvailable;
+        $totalAvailable = max(0, $totalFasilitas - $totalBooked);
         
         // Ambil upcoming bookings
         $upcomingBookings = Peminjaman::with('fasilitas')

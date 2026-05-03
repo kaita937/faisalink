@@ -6,6 +6,7 @@
     <title>Detail Pengajuan - Faisalink Admin</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/dashboard-booking-detail.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <!-- Header -->
@@ -29,11 +30,7 @@
             <span>&larr;</span> Kembali ke Dashboard
         </a>
 
-        @if(session('success'))
-            <div style="background-color: #d4edda; color: #155724; padding: 15px; border-radius: 8px; margin-bottom: 25px; border-left: 4px solid #28a745;">
-                {{ session('success') }}
-            </div>
-        @endif
+        <!-- Flash Messages handled by SweetAlert2 -->
 
         <div class="detail-card">
             <div class="card-header">
@@ -118,19 +115,79 @@
                     <div class="final-actions">
                         <form action="{{ route('admin.booking.approve', $booking->id_peminjaman) }}" method="POST">
                             @csrf
-                            <button type="submit" class="btn btn-approve" onclick="return confirm('Apakah Anda yakin Sarpras sudah MENYETUJUI pengajuan ini?');">✓ Setujui Pengajuan</button>
+                            <button type="button" class="btn btn-approve" data-confirm="Apakah Anda yakin Sarpras sudah MENYETUJUI pengajuan ini?">✓ Setujui Pengajuan</button>
                         </form>
-                        <form action="{{ route('admin.booking.reject', $booking->id_peminjaman) }}" method="POST">
+                        <form action="{{ route('admin.booking.reject', $booking->id_peminjaman) }}" method="POST" style="width: 100%;">
                             @csrf
-                            <button type="submit" class="btn btn-reject" onclick="return confirm('Apakah Anda yakin Sarpras MENOLAK pengajuan ini?');">✕ Tolak Pengajuan</button>
+                            <div style="margin-bottom: 15px; text-align: left;">
+                                <label for="alasan_penolakan" style="display: block; margin-bottom: 5px; font-weight: 600; color: #4b5563;">Alasan Penolakan:</label>
+                                <textarea name="alasan_penolakan" id="alasan_penolakan" rows="2" style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; font-family: inherit;" placeholder="Berikan alasan penolakan agar peminjam memahami kendalanya..." required></textarea>
+                            </div>
+                            <button type="button" class="btn btn-reject" style="width: 100%;" data-confirm="Apakah Anda yakin ingin MENOLAK pengajuan ini?">✕ Konfirmasi Tolak Pengajuan</button>
                         </form>
                     </div>
 
+                </div>
+                @elseif($booking->status_peminjaman === 'Ditolak' && $booking->alasan_penolakan)
+                <div style="margin-top: 30px; padding: 20px; background-color: #fff5f5; border-radius: 8px; border: 1px solid #feb2b2;">
+                    <h4 style="color: #c53030; margin-bottom: 10px;">Alasan Penolakan:</h4>
+                    <p style="color: #742a2a; line-height: 1.5;">{{ $booking->alasan_penolakan }}</p>
                 </div>
                 @endif
             </div>
         </div>
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+            });
+
+            @if(session('success'))
+                Toast.fire({
+                    icon: 'success',
+                    title: '{{ session('success') }}'
+                });
+            @endif
+
+            @if($errors->any())
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Kesalahan Input',
+                    html: '<ul style="text-align:left;">@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>',
+                });
+            @endif
+
+            document.body.addEventListener('click', function(e) {
+                const confirmEl = e.target.closest('[data-confirm]');
+                if (confirmEl) {
+                    e.preventDefault();
+                    const message = confirmEl.getAttribute('data-confirm');
+                    const form = confirmEl.closest('form');
+                    
+                    Swal.fire({
+                        title: 'Konfirmasi',
+                        text: message,
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#2e66ff',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, Lanjutkan!',
+                        cancelButtonText: 'Batal',
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>

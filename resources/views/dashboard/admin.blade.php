@@ -14,6 +14,7 @@
             }
         }
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <!-- Header -->
@@ -43,11 +44,7 @@
         @else
             <h1>📊 Admin Dashboard</h1>
 
-            @if(session('success'))
-                <div style="background-color: #d4edda; color: #155724; padding: 15px; border-radius: 8px; margin-bottom: 25px; border-left: 4px solid #28a745;">
-                    {{ session('success') }}
-                </div>
-            @endif
+            <!-- Flash Messages handled by SweetAlert2 -->
 
             <!-- Stats -->
             <div class="stats-grid">
@@ -100,5 +97,66 @@
     <footer>
         <p>&copy; 2026 Faisalink - Smart Facility Booking System | Admin Panel</p>
     </footer>
+    <!-- SweetAlert2 Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            });
+
+            @if(session('success'))
+                Toast.fire({
+                    icon: 'success',
+                    title: '{{ session('success') }}'
+                });
+            @endif
+
+            @if(session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: '{{ session('error') }}',
+                });
+            @endif
+
+            // Handle confirmation for any element with data-confirm
+            document.body.addEventListener('click', function(e) {
+                const confirmEl = e.target.closest('[data-confirm]');
+                if (confirmEl) {
+                    e.preventDefault();
+                    const message = confirmEl.getAttribute('data-confirm') || 'Apakah Anda yakin?';
+                    const form = confirmEl.closest('form');
+                    
+                    Swal.fire({
+                        title: 'Konfirmasi',
+                        text: message,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#2e66ff',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, Lanjutkan!',
+                        cancelButtonText: 'Batal',
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            if (form) {
+                                form.submit();
+                            } else if (confirmEl.tagName === 'A') {
+                                window.location.href = confirmEl.href;
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>

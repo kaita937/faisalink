@@ -40,7 +40,7 @@
                             <form action="{{ route('admin.facilities.destroy', $facility->id_fasilitas) }}" method="POST" class="inline">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-reject" style="padding: 6px 12px; font-size: 0.8rem;" onclick="return confirm('Apakah Anda yakin ingin menghapus fasilitas ini?')">Hapus</button>
+                                <button type="button" class="btn btn-reject" style="padding: 6px 12px; font-size: 0.8rem;" data-confirm="Apakah Anda yakin ingin menghapus fasilitas ini?">Hapus</button>
                             </form>
                         </div>
                     </td>
