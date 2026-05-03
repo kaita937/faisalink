@@ -16,19 +16,13 @@ class DashboardController extends Controller
         
         // Ambil statistik
         $totalFasilitas = Fasilitas_Kampus::count();
-        $today = now()->toDateString();
-        
-        // Hitung fasilitas yang benar-benar tersedia (Status 'Tersedia' dan tidak ada peminjaman disetujui hari ini)
-        $totalAvailable = Fasilitas_Kampus::where('status_fasilitas', 'Tersedia')
-            ->whereNotIn('id_fasilitas', function($query) use ($today) {
-                $query->select('id_fasilitas')
-                      ->from('Peminjaman')
-                      ->where('tanggal_peminjaman', $today)
-                      ->where('status_peminjaman', 'Disetujui');
-            })
+        // Hitung statistik user-specific (Booked = peminjaman aktif/mendatang milik user)
+        $totalBooked = Peminjaman::where('id_peminjam', $user->id_peminjam)
+            ->whereIn('status_peminjaman', ['Pending', 'Disetujui'])
+            ->where('tanggal_peminjaman', '>=', now()->toDateString())
             ->count();
             
-        $totalBooked = $totalFasilitas - $totalAvailable;
+        $totalAvailable = $totalFasilitas - $totalBooked;
         
         // Ambil upcoming bookings
         $upcomingBookings = Peminjaman::with('fasilitas')
@@ -40,7 +34,26 @@ class DashboardController extends Controller
         // Ambil semua fasilitas untuk kategori
         $fasilitas = Fasilitas_Kampus::all();
         
-        return view('dashboard.peminjam', compact('user', 'totalAvailable', 'totalBooked', 'upcomingBookings', 'fasilitas'));
+        // Ambil notifikasi dinamis (berdasarkan perubahan status terbaru)
+        $notifications = Peminjaman::with('fasilitas')
+            ->where('id_peminjam', $user->id_peminjam)
+            ->where('status_peminjaman', '!=', 'Pending')
+            ->orderBy('id_peminjaman', 'desc')
+            ->limit(5)
+            ->get()
+            ->map(function($item) {
+                $status = strtolower($item->status_peminjaman);
+                return [
+                    'type' => $status == 'disetujui' ? 'success' : ($status == 'ditolak' ? 'warning' : 'info'),
+                    'title' => 'Status: ' . $item->status_peminjaman,
+                    'message' => 'Pengajuan ' . $item->fasilitas->nama_fasilitas . ($status == 'disetujui' ? ' telah disetujui.' : ' telah ditolak.'),
+                    'time' => 'Baru saja',
+                    'read' => false,
+                    'url' => route('booking_view')
+                ];
+            });
+            
+        return view('dashboard.peminjam', compact('user', 'totalAvailable', 'totalBooked', 'upcomingBookings', 'fasilitas', 'notifications'));
     }
 
     public function facility()
@@ -113,6 +126,7 @@ class DashboardController extends Controller
         $totalPeminjaman = Peminjaman::count();
         $peminjamanbaru = Peminjaman::where('status_peminjaman', 'Pending')->count();
         $peminjamanditerima = Peminjaman::where('status_peminjaman', 'Disetujui')->count();
+        $peminjamanditolak = Peminjaman::where('status_peminjaman', 'Ditolak')->count();
         
         // Ambil pending peminjaman
         $pendingBookings = Peminjaman::with('peminjam', 'fasilitas')
@@ -121,6 +135,6 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
         
-        return view('dashboard.admin', compact('admin', 'totalPeminjaman', 'peminjamanbaru', 'peminjamanditerima', 'pendingBookings'));
+        return view('dashboard.admin', compact('admin', 'totalPeminjaman', 'peminjamanbaru', 'peminjamanditerima', 'peminjamanditolak', 'pendingBookings'));
     }
 }

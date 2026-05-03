@@ -62,8 +62,10 @@
                 <!-- Status Badge -->
                 @if($booking->status_peminjaman == 'pending')
                     <div class="badge badge-pending"><div class="dot"></div>Pending</div>
-                @else
+                @elseif($booking->status_peminjaman == 'disetujui' || $booking->status_peminjaman == 'Disetujui')
                     <div class="badge badge-approved"><div class="dot"></div>Approved</div>
+                @else
+                    <div class="badge" style="background:#fee2e2; color:#ef4444;"><div class="dot" style="background:#ef4444;"></div>{{ ucfirst($booking->status_peminjaman) }}</div>
                 @endif
             </div>
 
@@ -147,17 +149,12 @@
         <div class="booking-card" data-category="cancelled">
 
             <div class="card-header">
-                <div class="badge" style="background:#fee2e2; color:#ef4444;"><div class="dot" style="background:#ef4444;"></div>Cancelled</div>
                 <div>
                     <h3>{{ $booking->fasilitas->nama_fasilitas }}</h3>
                     <p>ID : BK - {{ $booking->id_peminjaman }}</p>
                 </div>
                 <!-- Status Badge -->
-                @if($booking->status_peminjaman == 'pending')
-                    <div class="badge badge-pending"><div class="dot"></div>Pending</div>
-                @else
-                    <div class="badge badge-approved"><div class="dot"></div>Approved</div>
-                @endif
+                <div class="badge" style="background:#fee2e2; color:#ef4444;"><div class="dot" style="background:#ef4444;"></div>{{ ucfirst($booking->status_peminjaman) }}</div>
             </div>
 
             <div class="card-body">
@@ -184,6 +181,11 @@
                     </svg>
                     <span>{{ $booking->fasilitas->lokasi_fasilitas }}</span>
                 </div>
+                @if($booking->keterangan)
+                <div style="margin-top: 15px; padding: 10px; background: #fff5f5; border-radius: 6px; border-left: 3px solid #ef4444; font-size: 0.85rem; color: #b91c1c;">
+                    <strong>Alasan:</strong> {{ $booking->keterangan }}
+                </div>
+                @endif
             </div>
         </div>
     @endforeach

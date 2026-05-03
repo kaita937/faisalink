@@ -63,6 +63,10 @@
                     <h3>Disetujui</h3>
                     <div class="number">{{ $peminjamanditerima }}</div>
                 </div>
+                <div class="stat-card" style="border-left-color: #d93025;">
+                    <h3 style="color: #d93025;">Ditolak</h3>
+                    <div class="number" style="color: #d93025;">{{ $peminjamanditolak }}</div>
+                </div>
             </div>
 
             <!-- Pending Requests -->

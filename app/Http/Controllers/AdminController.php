@@ -22,13 +22,14 @@ class AdminController extends Controller
         $totalPeminjaman = Peminjaman::count();
         $peminjamanbaru = Peminjaman::where('status_peminjaman', 'Pending')->count();
         $peminjamanditerima = Peminjaman::where('status_peminjaman', 'Disetujui')->count();
+        $peminjamanditolak = Peminjaman::where('status_peminjaman', 'Ditolak')->count();
         $pendingBookings = Peminjaman::with('peminjam', 'fasilitas')
             ->where('status_peminjaman', 'Pending')
             ->orderBy('tanggal_pengajuan', 'asc')
             ->limit(5)
             ->get();
         
-        return view('dashboard.booking_detail', compact('admin', 'booking', 'totalPeminjaman', 'peminjamanbaru', 'peminjamanditerima', 'pendingBookings'));
+        return view('dashboard.booking_detail', compact('admin', 'booking', 'totalPeminjaman', 'peminjamanbaru', 'peminjamanditerima', 'peminjamanditolak', 'pendingBookings'));
     }
 
     /**
@@ -50,7 +51,7 @@ class AdminController extends Controller
     /**
      * Tolak peminjaman
      */
-    public function rejectBooking($id)
+    public function rejectBooking(Request $request, $id)
     {
         $admin = Auth::guard('admin')->user();
         $booking = Peminjaman::findOrFail($id);
@@ -58,9 +59,10 @@ class AdminController extends Controller
         $booking->update([
             'status_peminjaman' => 'Ditolak',
             'id_admin' => $admin->id_admin,
+            'keterangan' => $request->alasan_penolakan ?? 'Pengajuan tidak memenuhi syarat atau fasilitas sedang digunakan untuk agenda fakultas.',
         ]);
 
-        return redirect()->back()->with('success', 'Peminjaman telah ditolak.');
+        return redirect()->route('dashboard.admin')->with('success', 'Peminjaman telah ditolak.');
     }
 
     // Fasilitas CRUD

@@ -115,15 +115,23 @@
                         <span style="color: #999; font-size: 0.9rem;">— Langkah 2: Setelah mendapat balasan dari Sarpras —</span>
                     </div>
 
-                    <div class="final-actions">
+                    <div class="final-actions" style="flex-direction: column; align-items: stretch; gap: 20px; border-top: 1px solid #eee; padding-top: 20px;">
                         <form action="{{ route('admin.booking.approve', $booking->id_peminjaman) }}" method="POST">
                             @csrf
-                            <button type="submit" class="btn btn-approve" onclick="return confirm('Apakah Anda yakin Sarpras sudah MENYETUJUI pengajuan ini?');">✓ Setujui Pengajuan</button>
+                            <button type="submit" class="btn btn-approve" style="width: 100%; padding: 12px;" onclick="return confirm('Apakah Anda yakin Sarpras sudah MENYETUJUI pengajuan ini?');">✓ Setujui Pengajuan</button>
                         </form>
-                        <form action="{{ route('admin.booking.reject', $booking->id_peminjaman) }}" method="POST">
-                            @csrf
-                            <button type="submit" class="btn btn-reject" onclick="return confirm('Apakah Anda yakin Sarpras MENOLAK pengajuan ini?');">✕ Tolak Pengajuan</button>
-                        </form>
+                        
+                        <div style="background: #fff5f5; padding: 20px; border-radius: 8px; border: 1px solid #fed7d7;">
+                            <h4 style="color: #c53030; margin-bottom: 10px;">Tolak Pengajuan</h4>
+                            <form action="{{ route('admin.booking.reject', $booking->id_peminjaman) }}" method="POST">
+                                @csrf
+                                <div style="margin-bottom: 15px;">
+                                    <label style="display: block; font-size: 0.85rem; color: #666; margin-bottom: 5px;">Alasan Penolakan (akan dilihat oleh peminjam):</label>
+                                    <textarea name="alasan_penolakan" rows="3" style="width: 100%; border: 1px solid #feb2b2; border-radius: 6px; padding: 10px; font-family: inherit;" placeholder="Contoh: Fasilitas sedang dalam pembersihan rutin atau digunakan untuk acara Dies Natalis."></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-reject" style="width: 100%; padding: 10px;" onclick="return confirm('Apakah Anda yakin ingin MENOLAK pengajuan ini?');">✕ Konfirmasi Tolak Pengajuan</button>
+                            </form>
+                        </div>
                     </div>
 
                 </div>
