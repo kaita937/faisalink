@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile - Faisalink</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/dashboard-peminjam.css') }}">
     <style>
         :root {
             --primary: #1f6dff;
@@ -22,47 +23,9 @@
         }
 
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Inter', sans-serif;
             background: var(--bg);
             color: var(--text-dark);
-        }
-
-        .topbar {
-            background: white;
-            padding: 14px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 800;
-            color: var(--primary);
-            text-decoration: none;
-        }
-
-        .logo img {
-            width: 36px;
-            height: 36px;
-        }
-
-        .icon-button {
-            width: 38px;
-            height: 38px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            background: white;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
         }
 
         .page {
@@ -304,23 +267,105 @@
         }
     @endphp
 
-    <header class="topbar">
-        <a href="{{ route('dashboard.user') }}" class="logo">
-            <img src="{{ asset('Icon/logo.png') }}" alt="Faisalink">
-            <span>Faisalink</span>
-        </a>
-        <button class="icon-button" type="button" aria-label="Notifications">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 3C9.238 3 7 5.238 7 8V11.4C7 11.85 6.88 12.29 6.65 12.68L5.55 14.5C5.13 15.2 5.64 16.07 6.44 16.07H17.56C18.36 16.07 18.87 15.2 18.45 14.5L17.35 12.68C17.12 12.29 17 11.85 17 11.4V8C17 5.238 14.762 3 12 3Z" stroke="#1f6dff" stroke-width="1.5"/>
-                <path d="M9.5 18C9.85 19.16 10.85 20 12 20C13.15 20 14.15 19.16 14.5 18" stroke="#1f6dff" stroke-width="1.5" stroke-linecap="round"/>
-            </svg>
-        </button>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <a href="{{ route('landing') }}" class="logo-section">
+                <img src="{{ asset('Icon/logo.png') }}" alt="Faisalink">
+                <span>Faisalink</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="{{ route('dashboard.user') }}">Home</a></li>
+                <li><a href="{{ route('facility') }}">Facilities</a></li>
+                <li><a href="{{ route('booking_view') }}">Booking</a></li>
+                <li><a href="{{ route('profile') }}" class="active">Profile</a></li>
+            </ul>
+            <div style="display: flex; gap: 20px; align-items: center;">
+                <div class="search-box">
+                    <span class="search-icon">&#128269;</span>
+                    <input type="text" placeholder="Search Facilities...">
+                </div>
+                @php
+                    $notifications = $notifications ?? [
+                        [
+                            'type' => 'success',
+                            'title' => 'Pengajuan disetujui',
+                            'message' => 'Booking Lab Komputer 1 untuk 30 Oktober telah disetujui.',
+                            'time' => '2 jam lalu',
+                            'read' => false,
+                            'url' => '#'
+                        ],
+                        [
+                            'type' => 'info',
+                            'title' => 'Review terkirim',
+                            'message' => 'Review Anda untuk ruang meeting A telah dikirim.',
+                            'time' => '10 jam lalu',
+                            'read' => false,
+                            'url' => '#'
+                        ],
+                        [
+                            'type' => 'warning',
+                            'title' => 'Pengingat',
+                            'message' => 'Jangan lupa check-in untuk seminar besok jam 14:00.',
+                            'time' => '1 minggu lalu',
+                            'read' => true,
+                            'url' => '#'
+                        ]
+                    ];
+                    $unreadCount = 0;
+                    foreach ($notifications as $item) {
+                        if (empty($item['read'])) {
+                            $unreadCount++;
+                        }
+                    }
+                @endphp
+                <div class="notification-wrapper">
+                    <button class="notification-icon" id="notificationToggle" type="button" aria-label="Notifications">
+                        &#128276;
+                        <span class="notification-badge" id="notificationCount" style="display: {{ $unreadCount > 0 ? 'inline-flex' : 'none' }};">{{ $unreadCount }}</span>
+                    </button>
+                    <div class="notification-panel" id="notificationPanel">
+                        <div class="notification-header">
+                            <div class="notification-title">Notification</div>
+                            <button class="notification-action" id="notificationMarkAll" type="button">Mark all as read</button>
+                        </div>
+                        <div class="notification-list" id="notificationList">
+                            @forelse ($notifications as $notification)
+                                @php
+                                    $type = $notification['type'] ?? 'info';
+                                    $isRead = !empty($notification['read']);
+                                @endphp
+                                <a href="{{ $notification['url'] ?? '#' }}" class="notification-item {{ $type }} {{ $isRead ? 'read' : '' }}" data-read="{{ $isRead ? '1' : '0' }}">
+                                    <div class="notification-icon-bubble {{ $type }}">
+                                        @if ($type === 'success')
+                                            &#10003;
+                                        @elseif ($type === 'warning')
+                                            &#9200;
+                                        @else
+                                            &#8505;
+                                        @endif
+                                    </div>
+                                    <div class="notification-text">
+                                        <h4>{{ $notification['title'] ?? 'Update' }}</h4>
+                                        <p>{{ $notification['message'] ?? '-' }}</p>
+                                        <div class="notification-time">{{ $notification['time'] ?? 'baru saja' }}</div>
+                                    </div>
+                                </a>
+                            @empty
+                                <div class="notification-empty">Belum ada notifikasi.</div>
+                            @endforelse
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </header>
 
-    <main class="page">
-        @if (session('success'))
-            <div class="alert-success">{{ session('success') }}</div>
-        @endif
+    <div class="main-container">
+        <main class="page">
+            @if (session('success'))
+                <div class="alert-success">{{ session('success') }}</div>
+            @endif
 
         <section class="profile-card">
             <div class="profile-top">
@@ -485,9 +530,11 @@
             @csrf
             <button class="logout-btn" type="submit">Log out</button>
         </form>
-    </main>
+        </main>
+    </div>
 
     <script>
+        // Profile avatar upload
         const avatarInput = document.getElementById('avatarInput');
         const avatarPreview = document.getElementById('avatarPreview');
         const avatarImage = document.getElementById('avatarImage');
@@ -504,11 +551,9 @@
                 reader.onload = function(event) {
                     if (!avatarImage) {
                         const img = document.createElement('img');
-                        img.id = 'avatarImage';
                         img.src = event.target.result;
-                        if (avatarFallback) {
-                            avatarFallback.remove();
-                        }
+                        img.id = 'avatarImage';
+                        if (avatarFallback) avatarFallback.remove();
                         avatarPreview.innerHTML = '';
                         avatarPreview.appendChild(img);
                     } else {
@@ -518,6 +563,57 @@
                 reader.readAsDataURL(file);
             });
         }
+
+        // Notification functionality (from dashboard)
+        document.addEventListener('DOMContentLoaded', function() {
+            const notificationToggle = document.getElementById('notificationToggle');
+            const notificationPanel = document.getElementById('notificationPanel');
+            const notificationCount = document.getElementById('notificationCount');
+            const notificationMarkAll = document.getElementById('notificationMarkAll');
+            const notificationList = document.getElementById('notificationList');
+
+            function updateNotificationCount() {
+                if (!notificationCount || !notificationList) return;
+                const unreadItems = notificationList.querySelectorAll('.notification-item:not(.read)');
+                const unreadCount = unreadItems.length;
+                notificationCount.textContent = unreadCount;
+                notificationCount.style.display = unreadCount > 0 ? 'inline-flex' : 'none';
+            }
+
+            if (notificationToggle && notificationPanel) {
+                notificationToggle.addEventListener('click', function(event) {
+                    event.stopPropagation();
+                    notificationPanel.classList.toggle('open');
+                });
+
+                document.addEventListener('click', function(event) {
+                    if (!notificationPanel.contains(event.target) && !notificationToggle.contains(event.target)) {
+                        notificationPanel.classList.remove('open');
+                    }
+                });
+            }
+
+            if (notificationList) {
+                notificationList.addEventListener('click', function(event) {
+                    const item = event.target.closest('.notification-item');
+                    if (item) {
+                        item.classList.add('read');
+                        updateNotificationCount();
+                    }
+                });
+            }
+
+            if (notificationMarkAll) {
+                notificationMarkAll.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    if (!notificationList) return;
+                    notificationList.querySelectorAll('.notification-item').forEach(item => item.classList.add('read'));
+                    updateNotificationCount();
+                });
+            }
+
+            updateNotificationCount();
+        });
     </script>
 </body>
 </html>
