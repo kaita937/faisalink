@@ -326,9 +326,6 @@
 
     <div class="main-container">
         <main class="page">
-            @if (session('success'))
-                <div class="alert-success">{{ session('success') }}</div>
-            @endif
 
         <section class="profile-card">
             <div class="profile-top">
