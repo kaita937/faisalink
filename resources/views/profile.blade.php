@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile - Faisalink</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/dashboard-peminjam.css') }}">
     <style>
         :root {
@@ -321,98 +321,7 @@
     @endphp
 
     <!-- Header -->
-    <header>
-        <div class="header-container">
-            <a href="{{ route('landing') }}" class="logo-section">
-                <img src="{{ asset('Icon/logo.png') }}" alt="Faisalink">
-                <span>Faisalink</span>
-            </a>
-            <ul class="nav-links">
-                <li><a href="{{ route('dashboard.user') }}">Home</a></li>
-                <li><a href="{{ route('facility') }}">Facilities</a></li>
-                <li><a href="{{ route('booking_view') }}">Booking</a></li>
-                <li><a href="{{ route('profile') }}" class="active">Profile</a></li>
-            </ul>
-            <div style="display: flex; gap: 20px; align-items: center;">
-                <div class="search-box">
-                    <span class="search-icon">&#128269;</span>
-                    <input type="text" placeholder="Search Facilities...">
-                </div>
-                @php
-                    $notifications = $notifications ?? [
-                        [
-                            'type' => 'success',
-                            'title' => 'Pengajuan disetujui',
-                            'message' => 'Booking Lab Komputer 1 untuk 30 Oktober telah disetujui.',
-                            'time' => '2 jam lalu',
-                            'read' => false,
-                            'url' => '#'
-                        ],
-                        [
-                            'type' => 'info',
-                            'title' => 'Review terkirim',
-                            'message' => 'Review Anda untuk ruang meeting A telah dikirim.',
-                            'time' => '10 jam lalu',
-                            'read' => false,
-                            'url' => '#'
-                        ],
-                        [
-                            'type' => 'warning',
-                            'title' => 'Pengingat',
-                            'message' => 'Jangan lupa check-in untuk seminar besok jam 14:00.',
-                            'time' => '1 minggu lalu',
-                            'read' => true,
-                            'url' => '#'
-                        ]
-                    ];
-                    $unreadCount = 0;
-                    foreach ($notifications as $item) {
-                        if (empty($item['read'])) {
-                            $unreadCount++;
-                        }
-                    }
-                @endphp
-                <div class="notification-wrapper">
-                    <button class="notification-icon" id="notificationToggle" type="button" aria-label="Notifications">
-                        &#128276;
-                        <span class="notification-badge" id="notificationCount" style="display: {{ $unreadCount > 0 ? 'inline-flex' : 'none' }};">{{ $unreadCount }}</span>
-                    </button>
-                    <div class="notification-panel" id="notificationPanel">
-                        <div class="notification-header">
-                            <div class="notification-title">Notification</div>
-                            <button class="notification-action" id="notificationMarkAll" type="button">Mark all as read</button>
-                        </div>
-                        <div class="notification-list" id="notificationList">
-                            @forelse ($notifications as $notification)
-                                @php
-                                    $type = $notification['type'] ?? 'info';
-                                    $isRead = !empty($notification['read']);
-                                @endphp
-                                <a href="{{ $notification['url'] ?? '#' }}" class="notification-item {{ $type }} {{ $isRead ? 'read' : '' }}" data-read="{{ $isRead ? '1' : '0' }}">
-                                    <div class="notification-icon-bubble {{ $type }}">
-                                        @if ($type === 'success')
-                                            &#10003;
-                                        @elseif ($type === 'warning')
-                                            &#9200;
-                                        @else
-                                            &#8505;
-                                        @endif
-                                    </div>
-                                    <div class="notification-text">
-                                        <h4>{{ $notification['title'] ?? 'Update' }}</h4>
-                                        <p>{{ $notification['message'] ?? '-' }}</p>
-                                        <div class="notification-time">{{ $notification['time'] ?? 'baru saja' }}</div>
-                                    </div>
-                                </a>
-                            @empty
-                                <div class="notification-empty">Belum ada notifikasi.</div>
-                            @endforelse
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
+    <x-user-nav />
 
     <div class="main-container">
         <main class="page">

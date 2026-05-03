@@ -9,27 +9,7 @@
 
 </head>
 <body>
-    <header>
-        <div class="header-container">
-            <a href="{{ route('landing') }}" class="logo-section">
-                <img src="{{ asset('Icon/logo.png') }}" alt="Faisalink">
-                <span>Faisalink</span>
-            </a>
-            <ul class="nav-links">
-                <li><a href="{{ route('dashboard.user') }}">Home</a></li>
-                <li><a href="{{ route('facility') }}" >Facilities</a></li>
-                <li><a href="{{ route('booking_view') }}"class="active">Booking</a></li>
-                <li><a href="{{ route('profile') }}">Profile</a></li>
-            </ul>
-            <div style="display: flex; gap: 20px; align-items: center;">
-                <div class="search-box">
-                    <span class="search-icon">&#128269;</span>
-                    <input type="text" id="searchInput" placeholder="Search Facilities...">
-                </div>
-                <div class="notification-icon">&#128276;</div>
-            </div>
-        </div>
-    </header>
+    <x-user-nav search-input-id="searchInput" />
 
 
     <div class="main-container">
@@ -195,6 +175,11 @@
     document.addEventListener('DOMContentLoaded', () => {
         const filterButtons = document.querySelectorAll('.filter-btn');
         const bookingCards = document.querySelectorAll('.booking-card');
+        const notificationToggle = document.getElementById('notificationToggle');
+        const notificationPanel = document.getElementById('notificationPanel');
+        const notificationCount = document.getElementById('notificationCount');
+        const notificationMarkAll = document.getElementById('notificationMarkAll');
+        const notificationList = document.getElementById('notificationList');
 
         filterButtons.forEach((button) => {
             button.addEventListener('click', () => {
@@ -210,6 +195,55 @@
                 });
             });
         });
+
+        function updateNotificationCount() {
+            if (!notificationCount || !notificationList) {
+                return;
+            }
+
+            const unreadItems = notificationList.querySelectorAll('.notification-item:not(.read)');
+            const unreadCount = unreadItems.length;
+            notificationCount.textContent = unreadCount;
+            notificationCount.style.display = unreadCount > 0 ? 'inline-flex' : 'none';
+        }
+
+        if (notificationToggle && notificationPanel) {
+            notificationToggle.addEventListener('click', function(event) {
+                event.stopPropagation();
+                notificationPanel.classList.toggle('open');
+            });
+
+            document.addEventListener('click', function(event) {
+                if (!notificationPanel.contains(event.target) && !notificationToggle.contains(event.target)) {
+                    notificationPanel.classList.remove('open');
+                }
+            });
+        }
+
+        if (notificationList) {
+            notificationList.addEventListener('click', function(event) {
+                const item = event.target.closest('.notification-item');
+                if (item) {
+                    item.classList.add('read');
+                    updateNotificationCount();
+                }
+            });
+        }
+
+        if (notificationMarkAll) {
+            notificationMarkAll.addEventListener('click', function(event) {
+                event.preventDefault();
+                if (!notificationList) {
+                    return;
+                }
+                notificationList.querySelectorAll('.notification-item').forEach(item => {
+                    item.classList.add('read');
+                });
+                updateNotificationCount();
+            });
+        }
+
+        updateNotificationCount();
     });
 </script>
 </body>

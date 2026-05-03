@@ -261,6 +261,52 @@ header {
     color: #6b7280;
 }
 
+.notification-item.read {
+    opacity: 0.65;
+}
+
+.notification-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-top: 6px;
+    background: #2e66ff;
+}
+
+.notification-item.success .notification-dot {
+    background: #22c55e;
+}
+
+.notification-item.warning .notification-dot {
+    background: #f59e0b;
+}
+
+.notification-item.info .notification-dot {
+    background: #2e66ff;
+}
+
+.notification-content {
+    flex: 1;
+}
+
+.notification-title-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 4px;
+}
+
+.notification-subject {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #111827;
+}
+
+.notification-message {
+    font-size: 0.85rem;
+    color: #4b5563;
+}
+
 .notification-empty {
     padding: 18px 16px;
     text-align: center;
