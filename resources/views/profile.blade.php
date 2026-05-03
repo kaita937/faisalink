@@ -144,7 +144,6 @@
             letter-spacing: 0.02em;
         }
 
-        .settings-card,
         .form-card {
             background: white;
             border-radius: 18px;
@@ -159,25 +158,6 @@
             font-size: 1rem;
         }
 
-        .settings-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid var(--border);
-            color: var(--text-dark);
-            text-decoration: none;
-        }
-
-        .settings-item:last-child {
-            border-bottom: none;
-        }
-
-        .settings-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
 
         .form-grid {
             display: grid;
@@ -460,71 +440,6 @@
             </form>
         </section>
 
-        <section class="settings-card">
-            <div class="section-title">Settings</div>
-            <a class="settings-item" href="#">
-                <div class="settings-left">
-                    <div class="info-icon">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M7 6H17" stroke="#6b7280" stroke-width="1.5" stroke-linecap="round"/>
-                            <path d="M7 12H17" stroke="#6b7280" stroke-width="1.5" stroke-linecap="round"/>
-                            <path d="M7 18H13" stroke="#6b7280" stroke-width="1.5" stroke-linecap="round"/>
-                        </svg>
-                    </div>
-                    <span>Term and condition</span>
-                </div>
-                <span>&gt;</span>
-            </a>
-            <a class="settings-item" href="#">
-                <div class="settings-left">
-                    <div class="info-icon">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="12" cy="12" r="9" stroke="#6b7280" stroke-width="1.5"/>
-                            <path d="M12 16V12" stroke="#6b7280" stroke-width="1.5" stroke-linecap="round"/>
-                            <circle cx="12" cy="8" r="1" fill="#6b7280"/>
-                        </svg>
-                    </div>
-                    <span>Help and FAQ</span>
-                </div>
-                <span>&gt;</span>
-            </a>
-            <a class="settings-item" href="#">
-                <div class="settings-left">
-                    <div class="info-icon">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M6 9C6 6.239 8.239 4 11 4H13C15.761 4 18 6.239 18 9V14C18 16.761 15.761 19 13 19H11C8.239 19 6 16.761 6 14" stroke="#6b7280" stroke-width="1.5"/>
-                            <path d="M4 12H8" stroke="#6b7280" stroke-width="1.5" stroke-linecap="round"/>
-                        </svg>
-                    </div>
-                    <span>Notification setting</span>
-                </div>
-                <span>&gt;</span>
-            </a>
-            <a class="settings-item" href="#">
-                <div class="settings-left">
-                    <div class="info-icon">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M6 9V7C6 4.791 7.791 3 10 3H14C16.209 3 18 4.791 18 7V9" stroke="#6b7280" stroke-width="1.5"/>
-                            <rect x="5" y="9" width="14" height="12" rx="3" stroke="#6b7280" stroke-width="1.5"/>
-                        </svg>
-                    </div>
-                    <span>Privacy setting</span>
-                </div>
-                <span>&gt;</span>
-            </a>
-            <a class="settings-item" href="#">
-                <div class="settings-left">
-                    <div class="info-icon">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M7 7C7 9.761 9.239 12 12 12C14.761 12 17 9.761 17 7" stroke="#6b7280" stroke-width="1.5" stroke-linecap="round"/>
-                            <path d="M4 20C4 16.134 7.134 13 11 13H13C16.866 13 20 16.134 20 20" stroke="#6b7280" stroke-width="1.5" stroke-linecap="round"/>
-                        </svg>
-                    </div>
-                    <span>Contact admin</span>
-                </div>
-                <span>&gt;</span>
-            </a>
-        </section>
 
         <form method="POST" action="{{ route('logout') }}">
             @csrf
