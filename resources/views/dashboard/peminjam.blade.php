@@ -105,27 +105,27 @@
         <div class="categories-section">
             <div class="section-title">Browse Categories</div>
             <div class="categories-grid">
-                <a href="#" class="category-btn">
+                <a href="{{ route('facility.category', ['category' => 'laboratory']) }}" class="category-btn">
                     <span class="category-icon">🖥️</span>
                     <span>Laboratory</span>
                 </a>
-                <a href="#" class="category-btn">
+                <a href="{{ route('facility.category', ['category' => 'sport']) }}" class="category-btn">
                     <span class="category-icon">🏀</span>
                     <span>Sport</span>
                 </a>
-                <a href="#" class="category-btn">
+                <a href="{{ route('facility.category', ['category' => 'meeting']) }}" class="category-btn">
                     <span class="category-icon">💬</span>
                     <span>Meeting Room</span>
                 </a>
-                <a href="#" class="category-btn">
+                <a href="{{ route('facility.category', ['category' => 'hall']) }}" class="category-btn">
                     <span class="category-icon">🏛️</span>
                     <span>Auditorium & Hall</span>
                 </a>
-                <a href="#" class="category-btn">
+                <a href="{{ route('facility.category', ['category' => 'library']) }}" class="category-btn">
                     <span class="category-icon">📚</span>
                     <span>Library</span>
                 </a>
-                <a href="#" class="category-btn">
+                <a href="{{ route('facility.category', ['category' => 'studio']) }}" class="category-btn">
                     <span class="category-icon">🎵</span>
                     <span>Studio</span>
                 </a>

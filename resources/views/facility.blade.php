@@ -93,6 +93,8 @@
                 <button class="filter-btn" data-category="hall">Hall</button>
                 <button class="filter-btn" data-category="meeting">Meeting</button>
                 <button class="filter-btn" data-category="classroom">Classroom</button>
+                <button class="filter-btn" data-category="library">Library</button>
+                <button class="filter-btn" data-category="studio">Studio</button>
             </div>
         </div>
 
@@ -111,6 +113,10 @@
                         $kategori = 'meeting';
                     } elseif (str_contains($nama, 'kelas') || str_contains($nama, 'classroom')) {
                         $kategori = 'classroom';
+                    } elseif (str_contains($nama, 'library') || str_contains($nama, 'perpustakaan')) {
+                        $kategori = 'library';
+                    } elseif (str_contains($nama, 'studio')) {
+                        $kategori = 'studio';
                     } else {
                         $kategori = 'other';
                     }
@@ -206,6 +212,17 @@
                 const activeCategory = document.querySelector('.filter-btn.active').dataset.category;
                 filterCards(activeCategory, this.value.toLowerCase());
             });
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const initialCategory = "{{ $initialCategory ?? '' }}" || urlParams.get('category');
+            if (initialCategory) {
+                const targetBtn = document.querySelector(`.filter-btn[data-category="${initialCategory}"]`);
+                if (targetBtn) {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    targetBtn.classList.add('active');
+                    filterCards(initialCategory, searchInput.value.toLowerCase());
+                }
+            }
 
             function filterCards(category, searchTerm) {
                 let visibleCount = 0;
