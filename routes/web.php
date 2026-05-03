@@ -40,6 +40,7 @@ Route::middleware('auth:admin')->post('/admin/booking/{id}/reject', [\App\Http\C
 
 //rute booking user
 Route::middleware('auth:peminjam')->get('/booking_view', [BookingViewController::class, 'bookingInfo'])->name('booking_view');
+Route::middleware('auth:peminjam')->get('/booking_view/{id}', [BookingViewController::class, 'detail'])->name('booking.detail');
 Route::middleware('auth:peminjam')->delete('/booking/{id}', [BookingViewController::class, 'destroy'])->name('booking.destroy');
 // Rute Admin Fasilitas
 Route::middleware('auth:admin')->get('/admin/facilities', [\App\Http\Controllers\AdminController::class, 'facilitiesIndex'])->name('admin.facilities.index');

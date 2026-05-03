@@ -94,6 +94,7 @@
             </div>
 
             <div class="card-footer">
+                <a href="{{ route('booking.detail', $booking->id_peminjaman) }}" class="btn btn-outline-blue">Detail</a>
                 <form action="{{ route('booking.destroy', $booking->id_peminjaman) }}" method="POST" onsubmit="return confirm('Hapus booking ini?');">
                     @csrf
                     @method('DELETE')
@@ -140,6 +141,10 @@
                     <span>{{ $booking->fasilitas->lokasi_fasilitas }}</span>
                 </div>
             </div>
+
+            <div class="card-footer">
+                <a href="{{ route('booking.detail', $booking->id_peminjaman) }}" class="btn btn-outline-blue">Detail</a>
+            </div>
         </div>
     @endforeach
 
@@ -184,6 +189,10 @@
                     </svg>
                     <span>{{ $booking->fasilitas->lokasi_fasilitas }}</span>
                 </div>
+            </div>
+
+            <div class="card-footer">
+                <a href="{{ route('booking.detail', $booking->id_peminjaman) }}" class="btn btn-outline-blue">Detail</a>
             </div>
         </div>
     @endforeach
