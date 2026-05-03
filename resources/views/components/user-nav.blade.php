@@ -23,10 +23,10 @@
             </li>
         </ul>
         <div style="display: flex; gap: 20px; align-items: center;">
-            <div class="search-box">
-                <span class="search-icon">&#128269;</span>
-                <input type="text" placeholder="Search Facilities..." @if($searchInputId) id="{{ $searchInputId }}" @endif>
-            </div>
+            
+            <!-- Search component (Blade) -->
+            @include('components.⚡facility-search', ['searchInputId' => $searchInputId])
+
             @php
                 $notifications = $notifications ?? [
                     [
