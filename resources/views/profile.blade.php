@@ -219,6 +219,41 @@
             font-size: 0.9rem;
         }
 
+        .dropdown-content {
+            display: none;
+            padding: 10px 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            margin-top: 10px;
+            border: 1px solid var(--border);
+        }
+
+        .dropdown-content.show {
+            display: block;
+        }
+
+        .dropdown-arrow {
+            transition: transform 0.3s;
+        }
+
+        .dropdown-arrow.rotated {
+            transform: rotate(90deg);
+        }
+
+        .dropdown-text {
+            font-size: 0.9rem;
+            color: var(--text-dark);
+        }
+
+        .dropdown-text h4 {
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .dropdown-text p {
+            margin-bottom: 6px;
+        }
+
         @media (max-width: 860px) {
             .profile-top {
                 grid-template-columns: 1fr;
@@ -440,6 +475,111 @@
             </form>
         </section>
 
+        <section class="settings-card">
+            <div class="section-title">Settings</div>
+            <div class="settings-item" onclick="toggleDropdown('terms-dropdown')">
+                <div class="settings-left">
+                    <div class="info-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7 6H17" stroke="#6b7280" stroke-width="1.5" stroke-linecap="round"/>
+                            <path d="M7 12H17" stroke="#6b7280" stroke-width="1.5" stroke-linecap="round"/>
+                            <path d="M7 18H13" stroke="#6b7280" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <span>Term and condition</span>
+                </div>
+                <span class="dropdown-arrow" id="terms-arrow">&gt;</span>
+            </div>
+            <div class="dropdown-content" id="terms-dropdown">
+                <div class="dropdown-text">
+                    <h4>Syarat dan Ketentuan Faisalink</h4>
+                    <p>Selamat datang di Faisalink, platform peminjaman fasilitas kampus. Dengan menggunakan layanan ini, Anda setuju untuk mematuhi semua aturan yang berlaku.</p>
+                    <p>Pengguna wajib menggunakan fasilitas dengan bertanggung jawab dan mengembalikan dalam kondisi baik. Pelanggaran dapat dikenai sanksi sesuai kebijakan kampus.</p>
+                    <p>Faisalink berhak mengubah syarat dan ketentuan ini kapan saja tanpa pemberitahuan sebelumnya.</p>
+                </div>
+            </div>
+            <div class="settings-item" onclick="toggleDropdown('help-dropdown')">
+                <div class="settings-left">
+                    <div class="info-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="9" stroke="#6b7280" stroke-width="1.5"/>
+                            <path d="M12 16V12" stroke="#6b7280" stroke-width="1.5" stroke-linecap="round"/>
+                            <circle cx="12" cy="8" r="1" fill="#6b7280"/>
+                        </svg>
+                    </div>
+                    <span>Help and FAQ</span>
+                </div>
+                <span class="dropdown-arrow" id="help-arrow">&gt;</span>
+            </div>
+            <div class="dropdown-content" id="help-dropdown">
+                <div class="dropdown-text">
+                    <h4>Bantuan dan FAQ</h4>
+                    <p><strong>Bagaimana cara memesan fasilitas?</strong> Masuk ke akun Anda, pilih fasilitas, dan ikuti langkah-langkah pemesanan.</p>
+                    <p><strong>Apa yang harus dilakukan jika pemesanan ditolak?</strong> Hubungi admin melalui menu Contact Admin untuk penjelasan lebih lanjut.</p>
+                    <p><strong>Bagaimana mengubah profil?</strong> Pergi ke halaman Profile dan edit informasi Anda di bagian Edit Profile.</p>
+                </div>
+            </div>
+            <div class="settings-item" onclick="toggleDropdown('notification-dropdown')">
+                <div class="settings-left">
+                    <div class="info-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6 9C6 6.239 8.239 4 11 4H13C15.761 4 18 6.239 18 9V14C18 16.761 15.761 19 13 19H11C8.239 19 6 16.761 6 14" stroke="#6b7280" stroke-width="1.5"/>
+                            <path d="M4 12H8" stroke="#6b7280" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <span>Notification setting</span>
+                </div>
+                <span class="dropdown-arrow" id="notification-arrow">&gt;</span>
+            </div>
+            <div class="dropdown-content" id="notification-dropdown">
+                <div class="dropdown-text">
+                    <h4>Pengaturan Notifikasi</h4>
+                    <p>Aktifkan notifikasi email untuk pembaruan pemesanan.</p>
+                    <p>Aktifkan notifikasi push untuk pengingat check-in.</p>
+                    <p>Nonaktifkan notifikasi untuk hari libur.</p>
+                </div>
+            </div>
+            <div class="settings-item" onclick="toggleDropdown('privacy-dropdown')">
+                <div class="settings-left">
+                    <div class="info-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6 9V7C6 4.791 7.791 3 10 3H14C16.209 3 18 4.791 18 7V9" stroke="#6b7280" stroke-width="1.5"/>
+                            <rect x="5" y="9" width="14" height="12" rx="3" stroke="#6b7280" stroke-width="1.5"/>
+                        </svg>
+                    </div>
+                    <span>Privacy setting</span>
+                </div>
+                <span class="dropdown-arrow" id="privacy-arrow">&gt;</span>
+            </div>
+            <div class="dropdown-content" id="privacy-dropdown">
+                <div class="dropdown-text">
+                    <h4>Pengaturan Privasi</h4>
+                    <p>Jaga kerahasiaan data pribadi Anda. Faisalink tidak membagikan informasi tanpa izin.</p>
+                    <p>Anda dapat menghapus akun kapan saja melalui menu Contact Admin.</p>
+                    <p>Pastikan kata sandi Anda kuat dan unik.</p>
+                </div>
+            </div>
+            <div class="settings-item" onclick="toggleDropdown('contact-dropdown')">
+                <div class="settings-left">
+                    <div class="info-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7 7C7 9.761 9.239 12 12 12C14.761 12 17 9.761 17 7" stroke="#6b7280" stroke-width="1.5" stroke-linecap="round"/>
+                            <path d="M4 20C4 16.134 7.134 13 11 13H13C16.866 13 20 16.134 20 20" stroke="#6b7280" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <span>Contact admin</span>
+                </div>
+                <span class="dropdown-arrow" id="contact-arrow">&gt;</span>
+            </div>
+            <div class="dropdown-content" id="contact-dropdown">
+                <div class="dropdown-text">
+                    <h4>Hubungi Admin</h4>
+                    <p>Email: budi@admin.com</p>
+                    <p>Telepon: +62 858-3855-7954</p>
+                    <p>Jam kerja: Senin-Jumat, 08:00-17:00</p>
+                </div>
+            </div>
+        </section>
 
         <form method="POST" action="{{ route('logout') }}">
             @csrf
@@ -529,6 +669,18 @@
 
             updateNotificationCount();
         });
+
+        function toggleDropdown(id) {
+            const content = document.getElementById(id);
+            const arrow = document.getElementById(id.replace('-dropdown', '-arrow'));
+            if (content.classList.contains('show')) {
+                content.classList.remove('show');
+                arrow.classList.remove('rotated');
+            } else {
+                content.classList.add('show');
+                arrow.classList.add('rotated');
+            }
+        }
     </script>
 </body>
 </html>
