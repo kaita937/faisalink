@@ -76,10 +76,10 @@
 
             <div class="card-footer">
                 <a href="{{ route('booking.detail', $booking->id_peminjaman) }}" class="btn btn-outline-blue">Detail</a>
-                <form action="{{ route('booking.destroy', $booking->id_peminjaman) }}" method="POST" onsubmit="return confirm('Hapus booking ini?');">
+                <form action="{{ route('booking.destroy', $booking->id_peminjaman) }}" method="POST">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-outline-red">Cancel</button>
+                    <button type="button" class="btn btn-outline-red" data-confirm="Apakah Anda yakin ingin membatalkan booking ini?">Cancel</button>
                 </form>
             </div>
         </div>
