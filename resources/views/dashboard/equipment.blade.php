@@ -4,7 +4,7 @@
 <div class="container mx-auto px-4 py-8">
     <h1 class="text-3xl font-bold mb-6">Manajemen Perlengkapan Fasilitas Kampus</h1>
 
-    <a href="{{ route('admin.equipment.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4 inline-block">
+    <a href="{{ route('admin.equipment.create') }}" class="btn btn-primary mb-4">
         Tambah Perlengkapan
     </a>
 
@@ -28,17 +28,19 @@
             <tbody class="bg-white divide-y divide-gray-200">
                 @foreach($equipment as $item)
                 <tr>
-                    <td class="px-6 py-4 whitespace-nowrap">{{ $item->fasilitas->nama_fasilitas }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ $item->fasilitas->nama_fasilitas ?? 'Fasilitas Tidak Ditemukan' }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">{{ $item->nama_perlengkapan }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">{{ $item->jumlah }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">{{ $item->kondisi }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                        <a href="{{ route('admin.equipment.edit', $item->id_perlengkapan_fasilitas) }}" class="text-blue-600 hover:text-blue-900 mr-2">Edit</a>
-                        <form action="{{ route('admin.equipment.destroy', $item->id_perlengkapan_fasilitas) }}" method="POST" class="inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="text-red-600 hover:text-red-900" onclick="return confirm('Apakah Anda yakin ingin menghapus perlengkapan ini?')">Hapus</button>
-                        </form>
+                        <div style="display: flex; gap: 8px;">
+                            <a href="{{ route('admin.equipment.edit', $item->id_perlengkapan_fasilitas) }}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Edit</a>
+                            <form action="{{ route('admin.equipment.destroy', $item->id_perlengkapan_fasilitas) }}" method="POST" class="inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-reject" style="padding: 6px 12px; font-size: 0.8rem;" onclick="return confirm('Apakah Anda yakin ingin menghapus perlengkapan ini?')">Hapus</button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
                 @endforeach

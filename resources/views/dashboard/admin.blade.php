@@ -5,7 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Faisalink</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/dashboard-admin.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/dashboard-admin.css') }}?v={{ time() }}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            corePlugins: {
+                preflight: false,
+            }
+        }
+    </script>
 </head>
 <body>
     <!-- Header -->
@@ -15,9 +23,9 @@
             <span>Faisalink Admin</span>
         </div>
         <nav class="admin-nav">
-            <a href="{{ route('dashboard.admin') }}" class="nav-link">Dashboard</a>
-            <a href="{{ route('admin.facilities.index') }}" class="nav-link">Fasilitas</a>
-            <a href="{{ route('admin.equipment.index') }}" class="nav-link">Perlengkapan</a>
+            <a href="{{ route('dashboard.admin') }}" class="nav-link {{ request()->routeIs('dashboard.admin') ? 'active' : '' }}">Dashboard</a>
+            <a href="{{ route('admin.facilities.index') }}" class="nav-link {{ request()->routeIs('admin.facilities.*') ? 'active' : '' }}">Fasilitas</a>
+            <a href="{{ route('admin.equipment.index') }}" class="nav-link {{ request()->routeIs('admin.equipment.*') ? 'active' : '' }}">Perlengkapan</a>
         </nav>
         <div class="admin-info">
             <span>Welcome, {{ $admin->nama_admin }}</span>

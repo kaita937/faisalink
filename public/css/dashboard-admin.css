@@ -45,6 +45,30 @@ header {
     color: #555;
 }
 
+.admin-nav {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: #555;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.nav-link:hover {
+    color: #2e66ff;
+}
+
+.nav-link.active {
+    color: #2e66ff;
+    font-weight: 700;
+    border-bottom: 3px solid #2e66ff;
+    padding-bottom: 5px;
+}
+
 /* Main Container */
 .main-container {
     max-width: 1400px;
@@ -175,6 +199,15 @@ h1 {
 
 .btn-approve:hover {
     background-color: #2d8e47;
+}
+
+.btn-primary {
+    background-color: #2e66ff;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #1a4cd9;
 }
 
 .btn-reject {
