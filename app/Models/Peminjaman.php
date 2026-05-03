@@ -21,7 +21,8 @@ class Peminjaman extends Model
         'status_peminjaman',
         'administrasi_peminjaman',
         'keterangan',
-        'keperluan'
+        'keperluan',
+        'alasan_penolakan'
     ];
 
     public function fasilitas()

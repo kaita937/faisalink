@@ -140,6 +140,11 @@
                     </div>
                     <a href="{{ asset('storage/' . $booking->administrasi_peminjaman) }}" target="_blank" class="btn btn-outline">Buka Dokumen</a>
                 </div>
+                @if($booking->status_peminjaman === 'Ditolak' && $booking->alasan_penolakan)
+                <div style="margin-top: 25px; padding: 15px; background-color: #fff5f5; border-radius: 8px; border: 1px solid #feb2b2;">
+                    <h4 style="color: #c53030; margin-bottom: 8px; font-size: 1.1rem;">Alasan Penolakan:</h4>
+                    <p style="color: #742a2a; line-height: 1.5;">{{ $booking->alasan_penolakan }}</p>
+                </div>
                 @endif
             </div>
         </div>

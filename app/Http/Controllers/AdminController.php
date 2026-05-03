@@ -60,14 +60,19 @@ class AdminController extends Controller
     /**
      * Tolak peminjaman
      */
-    public function rejectBooking($id)
+    public function rejectBooking(Request $request, $id)
     {
+        $request->validate([
+            'alasan_penolakan' => 'required|string|max:500',
+        ]);
+
         $admin = Auth::guard('admin')->user();
         $booking = Peminjaman::with('fasilitas')->findOrFail($id);
 
         $booking->update([
             'status_peminjaman' => 'Ditolak',
             'id_admin' => $admin->id_admin,
+            'alasan_penolakan' => $request->alasan_penolakan,
         ]);
 
         PeminjamNotification::create([
@@ -75,11 +80,11 @@ class AdminController extends Controller
             'id_peminjaman' => $booking->id_peminjaman,
             'type' => 'warning',
             'title' => 'Pengajuan ditolak',
-            'message' => 'Booking ' . ($booking->fasilitas->nama_fasilitas ?? 'fasilitas') . ' ditolak oleh admin.',
+            'message' => 'Booking ' . ($booking->fasilitas->nama_fasilitas ?? 'fasilitas') . ' ditolak. Alasan: ' . $request->alasan_penolakan,
             'url' => route('booking.detail', $booking->id_peminjaman),
         ]);
 
-        return redirect()->back()->with('success', 'Peminjaman telah ditolak.');
+        return redirect()->back()->with('success', 'Peminjaman telah ditolak dengan alasan.');
     }
 
     // Fasilitas CRUD
