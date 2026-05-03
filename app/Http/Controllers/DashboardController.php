@@ -52,6 +52,21 @@ class DashboardController extends Controller
         return $this->facility($category);
     }
 
+    public function facilitySearch(Request $request)
+    {
+        $query = trim((string) $request->get('query', ''));
+
+        if (strlen($query) < 2) {
+            return response()->json([]);
+        }
+
+        $results = Fasilitas_Kampus::where('nama_fasilitas', 'like', '%' . $query . '%')
+            ->take(5)
+            ->get(['id_fasilitas', 'nama_fasilitas', 'status_fasilitas']);
+
+        return response()->json($results);
+    }
+
     public function facilityDetail($id)
     {
         $user = Auth::guard('peminjam')->user();

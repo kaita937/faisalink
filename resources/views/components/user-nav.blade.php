@@ -23,10 +23,10 @@
             </li>
         </ul>
         <div style="display: flex; gap: 20px; align-items: center;">
-            <div class="search-box">
-                <span class="search-icon">&#128269;</span>
-                <input type="text" placeholder="Search Facilities..." @if($searchInputId) id="{{ $searchInputId }}" @endif>
-            </div>
+            
+            <!-- Search component (Blade) -->
+            @include('components.⚡facility-search', ['searchInputId' => $searchInputId])
+
             @php
                 $notifications = $notifications ?? [
                     [
@@ -96,73 +96,3 @@
         </div>
     </div>
 </header>
-
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-        });
-
-        @if(session('success'))
-            Toast.fire({
-                icon: 'success',
-                title: '{{ session('success') }}'
-            });
-        @endif
-
-        @if(session('error'))
-            Swal.fire({
-                icon: 'error',
-                title: 'Kesalahan',
-                text: '{{ session('error') }}',
-            });
-        @endif
-
-        @if($errors->any())
-            Swal.fire({
-                icon: 'error',
-                title: 'Kesalahan Input',
-                html: '<ul style="text-align:left;">@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>',
-            });
-        @endif
-
-        // Global confirmation handler
-        document.body.addEventListener('click', function(e) {
-            const confirmEl = e.target.closest('[data-confirm]');
-            if (confirmEl) {
-                e.preventDefault();
-                const message = confirmEl.getAttribute('data-confirm');
-                const form = confirmEl.closest('form');
-                
-                Swal.fire({
-                    title: 'Konfirmasi',
-                    text: message,
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#1f6dff',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Ya, Lanjutkan!',
-                    cancelButtonText: 'Batal',
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        if (form) {
-                            form.submit();
-                        } else if (confirmEl.tagName === 'A') {
-                            window.location.href = confirmEl.href;
-                        }
-                    }
-                });
-            }
-        });
-    });
-</script>

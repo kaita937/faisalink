@@ -157,13 +157,23 @@
 
             const urlParams = new URLSearchParams(window.location.search);
             const initialCategory = "{{ $initialCategory ?? '' }}" || urlParams.get('category');
+            const initialSearch = urlParams.get('search') || '';
+
+            if (initialSearch && searchInput) {
+                searchInput.value = initialSearch;
+            }
             if (initialCategory) {
                 const targetBtn = document.querySelector(`.filter-btn[data-category="${initialCategory}"]`);
                 if (targetBtn) {
                     filterBtns.forEach(b => b.classList.remove('active'));
                     targetBtn.classList.add('active');
-                    filterCards(initialCategory, searchInput.value.toLowerCase());
+                    filterCards(initialCategory, (searchInput?.value || '').toLowerCase());
                 }
+            }
+
+            if (initialSearch && !initialCategory) {
+                const activeCategory = document.querySelector('.filter-btn.active').dataset.category;
+                filterCards(activeCategory, (searchInput?.value || '').toLowerCase());
             }
 
             function filterCards(category, searchTerm) {
