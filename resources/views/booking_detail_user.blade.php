@@ -146,10 +146,10 @@
                     <p style="color: #742a2a; line-height: 1.5;">{{ $booking->alasan_penolakan }}</p>
                 </div>
                 @endif
+                @endif
             </div>
         </div>
     </div>
-</body>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {

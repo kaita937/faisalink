@@ -54,12 +54,12 @@
                         'url' => '#'
                     ]
                 ];
-                $unreadCount = 0;
-                foreach ($notifications as $item) {
-                    if (empty($item['read'])) {
-                        $unreadCount++;
-                    }
-                }
+                $notificationItems = collect($notifications);
+                $unreadCount = $notificationItems->filter(function ($item) {
+                    $readAt = data_get($item, 'read_at');
+                    $readFlag = data_get($item, 'read');
+                    return empty($readAt) && empty($readFlag);
+                })->count();
             @endphp
             <div class="notification-wrapper">
                 <button class="notification-icon" id="notificationToggle" type="button" aria-label="Notifications">
@@ -72,19 +72,32 @@
                         <button class="notification-action" id="notificationMarkAll" type="button">Mark all as read</button>
                     </div>
                     <div class="notification-list" id="notificationList">
-                        @forelse ($notifications as $notification)
+                        @forelse ($notificationItems as $notification)
                             @php
-                                $type = $notification['type'] ?? 'info';
-                                $isRead = !empty($notification['read']);
+                                $type = data_get($notification, 'type', 'info');
+                                $isRead = !empty(data_get($notification, 'read_at')) || !empty(data_get($notification, 'read'));
+                                $notificationUrl = data_get($notification, 'url', '#');
+                                $notificationTitle = data_get($notification, 'title', 'Update');
+                                $notificationMessage = data_get($notification, 'message', '-');
+                                $notificationTime = data_get($notification, 'time');
+                                if (empty($notificationTime) && data_get($notification, 'created_at')) {
+                                    $notificationTime = optional(data_get($notification, 'created_at'))->diffForHumans();
+                                }
                             @endphp
-                            <a href="{{ $notification['url'] ?? '#' }}" class="notification-item {{ $type }} {{ $isRead ? 'read' : '' }}" data-read="{{ $isRead ? '1' : '0' }}">
-                                <div class="notification-dot"></div>
-                                <div class="notification-content">
-                                    <div class="notification-title-row">
-                                        <span class="notification-subject">{{ $notification['title'] ?? 'Notification' }}</span>
-                                        <span class="notification-time">{{ $notification['time'] ?? '' }}</span>
-                                    </div>
-                                    <div class="notification-message">{{ $notification['message'] ?? '' }}</div>
+                            <a href="{{ $notificationUrl }}" class="notification-item {{ $type }} {{ $isRead ? 'read' : '' }}" data-id="{{ data_get($notification, 'id') }}">
+                                <div class="notification-icon-bubble {{ $type }}">
+                                    @if ($type === 'success')
+                                        &#10003;
+                                    @elseif ($type === 'warning')
+                                        &#9200;
+                                    @else
+                                        &#8505;
+                                    @endif
+                                </div>
+                                <div class="notification-text">
+                                    <h4>{{ $notificationTitle }}</h4>
+                                    <p>{{ $notificationMessage }}</p>
+                                    <div class="notification-time">{{ $notificationTime ?? 'baru saja' }}</div>
                                 </div>
                             </a>
                         @empty
