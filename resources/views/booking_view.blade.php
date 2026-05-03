@@ -19,7 +19,7 @@
                 <li><a href="{{ route('dashboard.user') }}">Home</a></li>
                 <li><a href="{{ route('facility') }}" >Facilities</a></li>
                 <li><a href="{{ route('booking_view') }}"class="active">Booking</a></li>
-                <li><a href="#profile">Profile</a></li>
+                <li><a href="{{ route('profile') }}">Profile</a></li>
             </ul>
             <div style="display: flex; gap: 20px; align-items: center;">
                 <div class="search-box">
