@@ -153,6 +153,44 @@
             gap: 14px;
         }
 
+        .settings-card {
+            background: white;
+            border-radius: 18px;
+            border: 1px solid var(--border);
+            padding: 20px;
+            display: grid;
+            gap: 12px;
+        }
+
+        .settings-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .settings-item:hover {
+            background: #f8fafc;
+            border-color: var(--border);
+        }
+
+        .settings-left {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .settings-item .info-icon {
+            background: #f1f5f9;
+        }
+
         .section-title {
             font-weight: 700;
             font-size: 1rem;
