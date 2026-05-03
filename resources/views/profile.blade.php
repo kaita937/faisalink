@@ -144,7 +144,6 @@
             letter-spacing: 0.02em;
         }
 
-        .settings-card,
         .form-card {
             background: white;
             border-radius: 18px;
@@ -159,25 +158,6 @@
             font-size: 1rem;
         }
 
-        .settings-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid var(--border);
-            color: var(--text-dark);
-            text-decoration: none;
-        }
-
-        .settings-item:last-child {
-            border-bottom: none;
-        }
-
-        .settings-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
 
         .form-grid {
             display: grid;
