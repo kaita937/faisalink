@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Peminjaman;
+use App\Models\PeminjamNotification;
 use App\Models\Fasilitas_Kampus;
 use App\Models\Perlengkapan_Fasilitas_Kampus;
 use Illuminate\Support\Facades\Auth;
@@ -37,11 +38,20 @@ class AdminController extends Controller
     public function approveBooking($id)
     {
         $admin = Auth::guard('admin')->user();
-        $booking = Peminjaman::findOrFail($id);
+        $booking = Peminjaman::with('fasilitas')->findOrFail($id);
 
         $booking->update([
             'status_peminjaman' => 'Disetujui',
             'id_admin' => $admin->id_admin,
+        ]);
+
+        PeminjamNotification::create([
+            'id_peminjam' => $booking->id_peminjam,
+            'id_peminjaman' => $booking->id_peminjaman,
+            'type' => 'success',
+            'title' => 'Pengajuan disetujui',
+            'message' => 'Booking ' . ($booking->fasilitas->nama_fasilitas ?? 'fasilitas') . ' telah disetujui.',
+            'url' => route('booking.detail', $booking->id_peminjaman),
         ]);
 
         return redirect()->back()->with('success', 'Peminjaman berhasil disetujui.');
@@ -53,11 +63,20 @@ class AdminController extends Controller
     public function rejectBooking($id)
     {
         $admin = Auth::guard('admin')->user();
-        $booking = Peminjaman::findOrFail($id);
+        $booking = Peminjaman::with('fasilitas')->findOrFail($id);
 
         $booking->update([
             'status_peminjaman' => 'Ditolak',
             'id_admin' => $admin->id_admin,
+        ]);
+
+        PeminjamNotification::create([
+            'id_peminjam' => $booking->id_peminjam,
+            'id_peminjaman' => $booking->id_peminjaman,
+            'type' => 'warning',
+            'title' => 'Pengajuan ditolak',
+            'message' => 'Booking ' . ($booking->fasilitas->nama_fasilitas ?? 'fasilitas') . ' ditolak oleh admin.',
+            'url' => route('booking.detail', $booking->id_peminjaman),
         ]);
 
         return redirect()->back()->with('success', 'Peminjaman telah ditolak.');
