@@ -53,6 +53,18 @@ class BookingViewController extends Controller
         return redirect()->route('booking_view');
     }
 
+    public function detail($id)
+    {
+        $userId = auth('peminjam')->id();
+
+        $booking = Peminjaman::with(['fasilitas', 'peminjam'])
+            ->where('id_peminjaman', $id)
+            ->where('id_peminjam', $userId)
+            ->firstOrFail();
+
+        return view('booking_detail_user', compact('booking'));
+    }
+
     
 }
 

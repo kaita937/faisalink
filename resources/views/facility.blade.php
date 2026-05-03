@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Facilities - Faisalink</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/facility.css') }}">
 </head>
 <body>
-    <!-- Header -->
+
     <!-- Header -->
     <x-user-nav search-input-id="searchInput" />
                     </div>
@@ -135,6 +136,7 @@
             const notificationCount = document.getElementById('notificationCount');
             const notificationMarkAll = document.getElementById('notificationMarkAll');
             const notificationList = document.getElementById('notificationList');
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
             // Filter by category
             filterBtns.forEach(btn => {
@@ -231,8 +233,26 @@
                 notificationList.addEventListener('click', function(event) {
                     const item = event.target.closest('.notification-item');
                     if (item) {
-                        item.classList.add('read');
-                        updateNotificationCount();
+                        const notificationId = item.dataset.id;
+                        const targetUrl = item.getAttribute('href');
+                        if (!notificationId || !csrfToken) {
+                            return;
+                        }
+
+                        event.preventDefault();
+                        fetch(`/notifications/${notificationId}/read`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': csrfToken
+                            }
+                        }).finally(() => {
+                            item.classList.add('read');
+                            updateNotificationCount();
+                            if (targetUrl && targetUrl !== '#') {
+                                window.location.href = targetUrl;
+                            }
+                        });
                     }
                 });
             }
@@ -243,10 +263,21 @@
                     if (!notificationList) {
                         return;
                     }
-                    notificationList.querySelectorAll('.notification-item').forEach(item => {
-                        item.classList.add('read');
+                    if (!csrfToken) {
+                        return;
+                    }
+                    fetch('/notifications/read-all', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken
+                        }
+                    }).finally(() => {
+                        notificationList.querySelectorAll('.notification-item').forEach(item => {
+                            item.classList.add('read');
+                        });
+                        updateNotificationCount();
                     });
-                    updateNotificationCount();
                 });
             }
 
