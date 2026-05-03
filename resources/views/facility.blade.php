@@ -18,15 +18,88 @@
             <ul class="nav-links">
                 <li><a href="{{ route('dashboard.user') }}">Home</a></li>
                 <li><a href="{{ route('facility') }}" class="active">Facilities</a></li>
+
                 <li><a href="{{ route('booking_view') }}">Booking</a></li>
-                <li><a href="#profile">Profile</a></li>
+                <li><a href="{{ route('profile') }}">Profile</a></li>
+
             </ul>
             <div style="display: flex; gap: 20px; align-items: center;">
                 <div class="search-box">
                     <span class="search-icon">&#128269;</span>
                     <input type="text" id="searchInput" placeholder="Search Facilities...">
                 </div>
-                <div class="notification-icon">&#128276;</div>
+                @php
+                    $notifications = $notifications ?? [
+                        [
+                            'type' => 'success',
+                            'title' => 'Pengajuan disetujui',
+                            'message' => 'Booking Lab Komputer 1 untuk 30 Oktober telah disetujui.',
+                            'time' => '2 jam lalu',
+                            'read' => false,
+                            'url' => '#'
+                        ],
+                        [
+                            'type' => 'info',
+                            'title' => 'Review terkirim',
+                            'message' => 'Review Anda untuk ruang meeting A telah dikirim.',
+                            'time' => '10 jam lalu',
+                            'read' => false,
+                            'url' => '#'
+                        ],
+                        [
+                            'type' => 'warning',
+                            'title' => 'Pengingat',
+                            'message' => 'Jangan lupa check-in untuk seminar besok jam 14:00.',
+                            'time' => '1 minggu lalu',
+                            'read' => true,
+                            'url' => '#'
+                        ]
+                    ];
+                    $unreadCount = 0;
+                    foreach ($notifications as $item) {
+                        if (empty($item['read'])) {
+                            $unreadCount++;
+                        }
+                    }
+                @endphp
+                <div class="notification-wrapper">
+                    <button class="notification-icon" id="notificationToggle" type="button" aria-label="Notifications">
+                        &#128276;
+                        <span class="notification-badge" id="notificationCount" style="display: {{ $unreadCount > 0 ? 'inline-flex' : 'none' }};">{{ $unreadCount }}</span>
+                    </button>
+                    <div class="notification-panel" id="notificationPanel">
+                        <div class="notification-header">
+                            <div class="notification-title">Notification</div>
+                            <button class="notification-action" id="notificationMarkAll" type="button">Mark all as read</button>
+                        </div>
+                        <div class="notification-list" id="notificationList">
+                            @forelse ($notifications as $notification)
+                                @php
+                                    $type = $notification['type'] ?? 'info';
+                                    $isRead = !empty($notification['read']);
+                                @endphp
+                                <a href="{{ $notification['url'] ?? '#' }}" class="notification-item {{ $type }} {{ $isRead ? 'read' : '' }}" data-read="{{ $isRead ? '1' : '0' }}">
+                                    <div class="notification-icon-bubble {{ $type }}">
+                                        @if ($type === 'success')
+                                            &#10003;
+                                        @elseif ($type === 'warning')
+                                            &#9200;
+                                        @else
+                                            &#8505;
+                                        @endif
+                                    </div>
+                                    <div class="notification-text">
+                                        <h4>{{ $notification['title'] ?? 'Update' }}</h4>
+                                        <p>{{ $notification['message'] ?? '-' }}</p>
+                                        <div class="notification-time">{{ $notification['time'] ?? 'baru saja' }}</div>
+                                    </div>
+                                </a>
+                            @empty
+                                <div class="notification-empty">Belum ada notifikasi.</div>
+                            @endforelse
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
@@ -138,6 +211,11 @@
             const filterBtns = document.querySelectorAll('.filter-btn');
             const facilityCards = document.querySelectorAll('.facility-card');
             const searchInput = document.getElementById('searchInput');
+            const notificationToggle = document.getElementById('notificationToggle');
+            const notificationPanel = document.getElementById('notificationPanel');
+            const notificationCount = document.getElementById('notificationCount');
+            const notificationMarkAll = document.getElementById('notificationMarkAll');
+            const notificationList = document.getElementById('notificationList');
 
             // Filter by category
             filterBtns.forEach(btn => {
@@ -194,6 +272,55 @@
                     emptyState.style.display = 'none';
                 }
             }
+
+            function updateNotificationCount() {
+                if (!notificationCount || !notificationList) {
+                    return;
+                }
+
+                const unreadItems = notificationList.querySelectorAll('.notification-item:not(.read)');
+                const unreadCount = unreadItems.length;
+                notificationCount.textContent = unreadCount;
+                notificationCount.style.display = unreadCount > 0 ? 'inline-flex' : 'none';
+            }
+
+            if (notificationToggle && notificationPanel) {
+                notificationToggle.addEventListener('click', function(event) {
+                    event.stopPropagation();
+                    notificationPanel.classList.toggle('open');
+                });
+
+                document.addEventListener('click', function(event) {
+                    if (!notificationPanel.contains(event.target) && !notificationToggle.contains(event.target)) {
+                        notificationPanel.classList.remove('open');
+                    }
+                });
+            }
+
+            if (notificationList) {
+                notificationList.addEventListener('click', function(event) {
+                    const item = event.target.closest('.notification-item');
+                    if (item) {
+                        item.classList.add('read');
+                        updateNotificationCount();
+                    }
+                });
+            }
+
+            if (notificationMarkAll) {
+                notificationMarkAll.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    if (!notificationList) {
+                        return;
+                    }
+                    notificationList.querySelectorAll('.notification-item').forEach(item => {
+                        item.classList.add('read');
+                    });
+                    updateNotificationCount();
+                });
+            }
+
+            updateNotificationCount();
         });
     </script>
 </body>

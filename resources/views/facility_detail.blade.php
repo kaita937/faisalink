@@ -18,8 +18,11 @@
             <ul class="nav-links">
                 <li><a href="{{ route('dashboard.user') }}">Home</a></li>
                 <li><a href="{{ route('facility') }}" class="active">Facilities</a></li>
+
                 <li><a href="{{ route('booking_view') }}">Booking</a></li>
-                <li><a href="#profile">Profile</a></li>
+
+                <li><a href="{{ route('profile') }}">Profile</a></li>
+
             </ul>
         </div>
     </header>
