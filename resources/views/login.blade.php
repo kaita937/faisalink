@@ -56,8 +56,9 @@
 
                 <button type="submit" class="btn-submit">Sign In</button>
             </form>
-            <div style="margin-top: 20px;">
-                <a href="{{ route('landing') }}" style="color: #2e66ff; text-decoration: none; font-size: 0.9rem;">Back to Home</a>
+            <div style="margin-top: 20px; text-align: center;">
+                <p style="font-size: 0.9rem; color: #666;">Belum punya akun? <a href="{{ route('register') }}" style="color: #2e66ff; text-decoration: none; font-weight: 600;">Daftar di sini</a></p>
+                <p style="margin-top: 10px;"><a href="{{ route('landing') }}" style="color: #2e66ff; text-decoration: none; font-size: 0.9rem;">Kembali ke Home</a></p>
             </div>
         </div>
     </div>
