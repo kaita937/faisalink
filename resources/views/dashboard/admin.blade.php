@@ -48,30 +48,48 @@
 
             <!-- Stats -->
             <div class="stats-grid">
-                <div class="stat-card">
-                    <h3>Total Peminjaman</h3>
-                    <div class="number">{{ $totalPeminjaman }}</div>
-                </div>
-                <div class="stat-card pending">
-                    <h3>Menunggu Persetujuan</h3>
-                    <div class="number">{{ $peminjamanbaru }}</div>
-                </div>
-                <div class="stat-card approved">
-                    <h3>Disetujui</h3>
-                    <div class="number">{{ $peminjamanditerima }}</div>
-                </div>
-                <div class="stat-card rejected">
-                    <h3>Ditolak</h3>
-                    <div class="number">{{ $peminjamanditolak }}</div>
-                </div>
-                <div class="stat-card">
-                    <h3>Total Fasilitas</h3>
-                    <div class="number">{{ $totalFasilitas }}</div>
-                </div>
-                <div class="stat-card">
-                    <h3>Total Perlengkapan</h3>
-                    <div class="number">{{ $totalPerlengkapan }}</div>
-                </div>
+                <a class="stat-card-link" href="{{ route('admin.bookings.index') }}">
+                    <div class="stat-card">
+                        <h3>Total Peminjaman</h3>
+                        <div class="number">{{ $totalPeminjaman }}</div>
+                        <span class="stat-action">Lihat Detail →</span>
+                    </div>
+                </a>
+                <a class="stat-card-link" href="{{ route('admin.bookings.index', ['status' => 'Pending']) }}">
+                    <div class="stat-card pending">
+                        <h3>Menunggu Persetujuan</h3>
+                        <div class="number">{{ $peminjamanbaru }}</div>
+                        <span class="stat-action">Lihat Detail →</span>
+                    </div>
+                </a>
+                <a class="stat-card-link" href="{{ route('admin.bookings.index', ['status' => 'Disetujui']) }}">
+                    <div class="stat-card approved">
+                        <h3>Disetujui</h3>
+                        <div class="number">{{ $peminjamanditerima }}</div>
+                        <span class="stat-action">Lihat Detail →</span>
+                    </div>
+                </a>
+                <a class="stat-card-link" href="{{ route('admin.bookings.index', ['status' => 'Ditolak']) }}">
+                    <div class="stat-card rejected">
+                        <h3>Ditolak</h3>
+                        <div class="number">{{ $peminjamanditolak }}</div>
+                        <span class="stat-action">Lihat Detail →</span>
+                    </div>
+                </a>
+                <a class="stat-card-link" href="{{ route('admin.facilities.index') }}">
+                    <div class="stat-card">
+                        <h3>Total Fasilitas</h3>
+                        <div class="number">{{ $totalFasilitas }}</div>
+                        <span class="stat-action">Lihat Detail →</span>
+                    </div>
+                </a>
+                <a class="stat-card-link" href="{{ route('admin.equipment.index') }}">
+                    <div class="stat-card">
+                        <h3>Total Perlengkapan</h3>
+                        <div class="number">{{ $totalPerlengkapan }}</div>
+                        <span class="stat-action">Lihat Detail →</span>
+                    </div>
+                </a>
             </div>
 
             <!-- Pending Requests -->

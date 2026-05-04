@@ -15,6 +15,7 @@ class AdminSeeder extends Seeder
     public function run(): void
     {
         $hash = Hash::make('password123');
+        $pwadmin = Hash::make('123456');
 
         DB::table('Admin')->insert([
             [
@@ -38,6 +39,13 @@ class AdminSeeder extends Seeder
                 'password' => $hash,
                 'contact' => '085123456789',
             ],
+            [
+                'nama_admin' => 'jamal',
+                'email' => 'jamal@admin.com',
+                'username' => 'jamal_admin',
+                'password' => $pwadmin,
+                'contact' => '082123456789',
+            ]
         ]);
     }
 }
