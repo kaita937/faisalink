@@ -32,4 +32,9 @@ class Peminjam extends Authenticatable
     {
         return $this->hasMany(PeminjamNotification::class, 'id_peminjam', 'id_peminjam');
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review_Fasilitas::class, 'id_peminjam', 'id_peminjam');
+    }
 }

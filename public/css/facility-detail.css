@@ -350,6 +350,14 @@ header {
     border-bottom: 2px solid #f0f0f0;
 }
 
+.section-title + .description,
+.section-title + .equipment-list,
+.section-title + .approved-booking-list,
+.section-title + .review-list,
+.section-title + p {
+    margin-top: 8px;
+}
+
 .description {
     font-size: 1.05rem;
     line-height: 1.7;
@@ -396,6 +404,21 @@ header {
 .booking-action {
     margin-top: 50px;
     text-align: center;
+}
+
+/* Section spacing helpers */
+.approved-booking-list,
+.review-list {
+    margin-bottom: 32px;
+}
+
+.equipment-list {
+    margin-bottom: 36px;
+}
+
+/* Light divider between major blocks */
+.detail-body > .section-title {
+    margin-top: 34px;
 }
 
 .btn-book {
@@ -550,6 +573,67 @@ header {
 .purpose-icon {
     font-size: 1rem;
     flex-shrink: 0;
+}
+
+.rating-score {
+    font-weight: 700;
+    color: #f59e0b;
+}
+
+.rating-count {
+    font-size: 0.9rem;
+    color: #6b7280;
+    margin-left: 8px;
+}
+
+.rating-empty {
+    color: #9aa0a6;
+    font-weight: 600;
+}
+
+.review-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 40px;
+}
+
+.review-item {
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 18px;
+    background: #fff;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+    gap: 12px;
+}
+
+.reviewer-name {
+    font-weight: 700;
+    color: #111827;
+}
+
+.review-rating {
+    font-weight: 700;
+    color: #f59e0b;
+}
+
+.review-date {
+    font-size: 0.85rem;
+    color: #6b7280;
+    margin-bottom: 10px;
+}
+
+.review-comment {
+    color: #4b5563;
+    line-height: 1.6;
+    white-space: pre-line;
 }
 
 /* Footer */

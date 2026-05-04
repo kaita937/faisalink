@@ -20,7 +20,7 @@ class BookingViewController extends Controller
             ->orderBy('tanggal_peminjaman', 'asc') // Urutkan dari jadwal terdekat
             ->get();
 
-        $pastBookings = Peminjaman::with('fasilitas')
+        $pastBookings = Peminjaman::with(['fasilitas', 'review'])
             ->where('id_peminjam', $userId)
             ->where('status_peminjaman', 'Selesai')
             ->orderBy('tanggal_peminjaman', 'desc') // Urutkan dari yang paling baru selesai

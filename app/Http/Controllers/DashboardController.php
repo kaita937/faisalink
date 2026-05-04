@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Fasilitas_Kampus;
 use App\Models\Peminjaman;
 use App\Models\Perlengkapan_Fasilitas_Kampus;
+use App\Models\Review_Fasilitas;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -40,7 +41,10 @@ class DashboardController extends Controller
     public function facility($category = null)
     {
         $user = Auth::guard('peminjam')->user();
-        $fasilitas = Fasilitas_Kampus::all();
+        $fasilitas = Fasilitas_Kampus::query()
+            ->withAvg('reviews as average_rating', 'rating')
+            ->withCount('reviews')
+            ->get();
         $initialCategory = $category;
 
         return view('facility', compact('user', 'fasilitas', 'initialCategory'));
@@ -78,7 +82,15 @@ class DashboardController extends Controller
             ->orderBy('jam_mulai', 'asc')
             ->get();
 
-        return view('facility_detail', compact('user', 'fasilitas', 'approvedBookings'));
+        $reviews = Review_Fasilitas::with('peminjam')
+            ->where('id_fasilitas', $id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $averageRating = $reviews->avg('rating');
+        $reviewsCount = $reviews->count();
+
+        return view('facility_detail', compact('user', 'fasilitas', 'approvedBookings', 'reviews', 'averageRating', 'reviewsCount'));
     }
 
     public function profile()

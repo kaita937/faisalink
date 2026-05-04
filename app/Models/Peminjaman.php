@@ -40,4 +40,9 @@ class Peminjaman extends Model
     {
         return $this->belongsTo(Admin::class, 'id_admin', 'id_admin');
     }
+
+    public function review()
+    {
+        return $this->hasOne(Review_Fasilitas::class, 'id_peminjaman', 'id_peminjaman');
+    }
 }

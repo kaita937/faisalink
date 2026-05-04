@@ -492,6 +492,7 @@ header {
         display: flex;
         gap: 12px;
         margin-top: auto; /* Mendorong tombol selalu ke paling bawah */
+        flex-wrap: wrap;
     }
     .btn {
         flex: 1;

@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BookingViewController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ReviewController;
 
 Route::get('/', function () {
     return view('landing');
@@ -53,6 +54,10 @@ Route::middleware('auth:peminjam')->get('/booking_view/{id}', [BookingViewContro
 Route::middleware('auth:peminjam')->delete('/booking/{id}', [BookingViewController::class, 'destroy'])->name('booking.destroy');
 Route::middleware('auth:peminjam')->post('/notifications/{id}/read', [NotificationController::class, 'markRead'])->name('notifications.read');
 Route::middleware('auth:peminjam')->post('/notifications/read-all', [NotificationController::class, 'markAllRead'])->name('notifications.readAll');
+Route::middleware('auth:peminjam')->get('/booking/{id}/review', [ReviewController::class, 'form'])->name('booking.review.form');
+Route::middleware('auth:peminjam')->post('/booking/{id}/review', [ReviewController::class, 'store'])->name('booking.review.store');
+Route::middleware('auth:peminjam')->put('/booking/{id}/review', [ReviewController::class, 'update'])->name('booking.review.update');
+Route::middleware('auth:peminjam')->delete('/booking/{id}/review', [ReviewController::class, 'destroy'])->name('booking.review.destroy');
 // Rute Admin Fasilitas
 Route::middleware('auth:admin')->get('/admin/facilities', [\App\Http\Controllers\AdminController::class, 'facilitiesIndex'])->name('admin.facilities.index');
 Route::middleware('auth:admin')->get('/admin/facilities/create', [\App\Http\Controllers\AdminController::class, 'facilitiesCreate'])->name('admin.facilities.create');

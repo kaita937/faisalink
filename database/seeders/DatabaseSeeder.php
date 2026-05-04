@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             FasilitasKampusSeeder::class,
             PerlengkapanFasilitasKampusSeeder::class,
             PeminjamanSeeder::class,
+            ReviewFasilitasSeeder::class,
         ]);
     }
 }
