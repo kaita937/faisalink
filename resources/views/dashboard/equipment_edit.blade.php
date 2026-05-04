@@ -7,6 +7,9 @@
     <form action="{{ route('admin.equipment.update', $equipment->id_perlengkapan_fasilitas) }}" method="POST" class="bg-white shadow-md rounded-lg p-6">
         @csrf
         @method('PUT')
+        @if(request('redirect_to'))
+            <input type="hidden" name="redirect_to" value="{{ request('redirect_to') }}">
+        @endif
 
         <div class="mb-4">
             <label for="id_fasilitas" class="block text-gray-700 text-sm font-bold mb-2">Fasilitas</label>
@@ -40,7 +43,7 @@
             <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                 Update
             </button>
-            <a href="{{ route('admin.equipment.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            <a href="{{ request('redirect_to', route('admin.equipment.index')) }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                 Batal
             </a>
         </div>

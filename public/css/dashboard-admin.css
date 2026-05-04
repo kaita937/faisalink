@@ -128,6 +128,14 @@ h1 {
     color: #34a853;
 }
 
+.stat-card.rejected {
+    border-left-color: #d93025;
+}
+
+.stat-card.rejected .number {
+    color: #d93025;
+}
+
 /* Pending Requests Section */
 .requests-section {
     background: white;

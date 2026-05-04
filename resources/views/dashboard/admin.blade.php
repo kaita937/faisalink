@@ -60,6 +60,18 @@
                     <h3>Disetujui</h3>
                     <div class="number">{{ $peminjamanditerima }}</div>
                 </div>
+                <div class="stat-card rejected">
+                    <h3>Ditolak</h3>
+                    <div class="number">{{ $peminjamanditolak }}</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Fasilitas</h3>
+                    <div class="number">{{ $totalFasilitas }}</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Perlengkapan</h3>
+                    <div class="number">{{ $totalPerlengkapan }}</div>
+                </div>
             </div>
 
             <!-- Pending Requests -->

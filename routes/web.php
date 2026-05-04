@@ -58,6 +58,7 @@ Route::middleware('auth:admin')->post('/admin/facilities', [\App\Http\Controller
 Route::middleware('auth:admin')->get('/admin/facilities/{id}/edit', [\App\Http\Controllers\AdminController::class, 'facilitiesEdit'])->name('admin.facilities.edit');
 Route::middleware('auth:admin')->put('/admin/facilities/{id}', [\App\Http\Controllers\AdminController::class, 'facilitiesUpdate'])->name('admin.facilities.update');
 Route::middleware('auth:admin')->delete('/admin/facilities/{id}', [\App\Http\Controllers\AdminController::class, 'facilitiesDestroy'])->name('admin.facilities.destroy');
+Route::middleware('auth:admin')->get('/admin/facilities/{id}/equipment', [\App\Http\Controllers\AdminController::class, 'facilityEquipment'])->name('admin.facilities.equipment');
 
 // Rute Admin Perlengkapan
 Route::middleware('auth:admin')->get('/admin/equipment', [\App\Http\Controllers\AdminController::class, 'equipmentIndex'])->name('admin.equipment.index');
