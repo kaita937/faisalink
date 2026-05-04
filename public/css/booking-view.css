@@ -251,13 +251,9 @@ header {
 
 .notification-time {
     font-size: 0.75rem;
-      color: #6b7280;
+    color: #6b7280;
 }
 
-
-    color: #9ca3af;
-    white-space: nowrap;
-}
 
 .notification-message {
     font-size: 0.85rem;
@@ -269,7 +265,6 @@ header {
     padding: 18px 16px;
     text-align: center;
     color: #9aa0a6;
-
     font-size: 0.9rem;
 }
 
@@ -405,6 +400,13 @@ header {
     }
     .badge-past .dot { background-color: #303231; }
 
+    .badge-cancelled {
+        background-color: #fee2e2;
+        color: #bc3333;
+    }
+    .badge-cancelled .dot { background-color: #f90000; }
+
+    
 
     .dot {
         width: 8px;

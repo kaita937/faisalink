@@ -133,17 +133,11 @@
         <div class="booking-card" data-category="cancelled">
 
             <div class="card-header">
-                <div class="badge" style="background:#fee2e2; color:#ef4444;"><div class="dot" style="background:#ef4444;"></div>Cancelled</div>
                 <div>
                     <h3>{{ $booking->fasilitas->nama_fasilitas }}</h3>
                     <p>ID : BK - {{ $booking->id_peminjaman }}</p>
                 </div>
-                <!-- Status Badge -->
-                @if($booking->status_peminjaman == 'pending')
-                    <div class="badge badge-pending"><div class="dot"></div>Pending</div>
-                @else
-                    <div class="badge badge-approved"><div class="dot"></div>Approved</div>
-                @endif
+                <div class="badge badge-cancelled"><div class="dot"></div>Cancelled</div>
             </div>
 
             <div class="card-body">
