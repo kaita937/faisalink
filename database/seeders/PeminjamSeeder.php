@@ -19,6 +19,7 @@ class PeminjamSeeder extends Seeder
         DB::table('Peminjam')->insert([
             [
                 'nama_peminjam' => 'Rudi Hermawan',
+                'nomor_identitas' => '20260001',
                 'username' => 'rudi_herm',
                 'email' => 'rudi@student.com',
                 'contact' => '081234567890',
@@ -26,6 +27,7 @@ class PeminjamSeeder extends Seeder
             ],
             [
                 'nama_peminjam' => 'Ani Wijaya',
+                'nomor_identitas' => '20260002',
                 'username' => 'ani_wijaya',
                 'email' => 'ani@student.com',
                 'contact' => '082345678901',
@@ -33,6 +35,7 @@ class PeminjamSeeder extends Seeder
             ],
             [
                 'nama_peminjam' => 'Dani Pratama',
+                'nomor_identitas' => '20260003',
                 'username' => 'dani_pratama',
                 'email' => 'dani@student.com',
                 'contact' => '083456789012',
@@ -40,6 +43,7 @@ class PeminjamSeeder extends Seeder
             ],
             [
                 'nama_peminjam' => 'Eka Putri',
+                'nomor_identitas' => '20260004',
                 'username' => 'eka_putri',
                 'email' => 'eka@student.com',
                 'contact' => '084567890123',
@@ -47,6 +51,7 @@ class PeminjamSeeder extends Seeder
             ],
             [
                 'nama_peminjam' => 'Fajar Ramadhan',
+                'nomor_identitas' => '20260005',
                 'username' => 'fajar_rama',
                 'email' => 'fajar@student.com',
                 'contact' => '085678901234',

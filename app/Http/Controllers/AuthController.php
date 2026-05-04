@@ -51,6 +51,7 @@ class AuthController extends Controller
         // Validasi input form
         $request->validate([
             'nama_peminjam' => 'required|string|max:100',
+            'nomor_identitas' => 'required|string|max:50',
             'username' => 'required|string|max:50|unique:Peminjam',
             'email' => 'required|email|max:100|unique:Peminjam',
             'contact' => 'nullable|string|max:20',
@@ -65,6 +66,7 @@ class AuthController extends Controller
         // Membuat user baru
         $peminjam = Peminjam::create([
             'nama_peminjam' => $request->nama_peminjam,
+            'nomor_identitas' => $request->nomor_identitas,
             'username' => $request->username,
             'email' => $request->email,
             'contact' => $request->contact,

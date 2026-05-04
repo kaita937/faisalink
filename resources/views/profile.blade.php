@@ -398,8 +398,12 @@
                         <input type="text" id="nama_peminjam" name="nama_peminjam" value="{{ old('nama_peminjam', $user->nama_peminjam ?? '') }}" required>
                     </div>
                     <div class="form-field">
-                        <label for="username">Student ID</label>
+                        <label for="username">Username</label>
                         <input type="text" id="username" name="username" value="{{ old('username', $user->username ?? '') }}" required>
+                    </div>
+                    <div class="form-field">
+                        <label for="nomor_identitas">NIM / NIP</label>
+                        <input type="text" id="nomor_identitas" name="nomor_identitas" value="{{ old('nomor_identitas', $user->nomor_identitas ?? '') }}" required>
                     </div>
                     <div class="form-field">
                         <label for="email">Email</label>

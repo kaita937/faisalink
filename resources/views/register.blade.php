@@ -48,6 +48,10 @@
                 </div>
 
                 <div class="form-group">
+                    <input type="text" name="nomor_identitas" class="form-control" placeholder="NIM / NIP" value="{{ old('nomor_identitas') }}" required>
+                </div>
+
+                <div class="form-group">
                     <input type="text" name="username" class="form-control" placeholder="Username" value="{{ old('username') }}" required>
                 </div>
 
