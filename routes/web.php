@@ -68,3 +68,8 @@ Route::middleware('auth:admin')->post('/admin/equipment', [\App\Http\Controllers
 Route::middleware('auth:admin')->get('/admin/equipment/{id}/edit', [\App\Http\Controllers\AdminController::class, 'equipmentEdit'])->name('admin.equipment.edit');
 Route::middleware('auth:admin')->put('/admin/equipment/{id}', [\App\Http\Controllers\AdminController::class, 'equipmentUpdate'])->name('admin.equipment.update');
 Route::middleware('auth:admin')->delete('/admin/equipment/{id}', [\App\Http\Controllers\AdminController::class, 'equipmentDestroy'])->name('admin.equipment.destroy');
+
+
+//admin user
+Route ::middleware('auth:admin')->get('/admin/users', [\App\Http\Controllers\AdminController::class, 'usersIndex'])->name('admin.users.index');  
+Route ::middleware('auth:admin')->delete('/admin/users/{id}', [\App\Http\Controllers\AdminController::class, 'usersDestroy'])->name('admin.users.destroy');
