@@ -12,7 +12,6 @@
 <body>
     <x-user-nav search-input-id="searchInput" />
 
-
     <div class="main-container">
         <!-- Page Header -->
         <div class="page-header">
@@ -29,7 +28,6 @@
         </div>
 
     </div>
-
 
  <div class="booking-grid">
 
@@ -85,7 +83,6 @@
         </div>
     @endforeach
 
-
     @foreach($pastBookings as $booking)
         <div class="booking-card" data-category="past">
 
@@ -125,6 +122,9 @@
 
             <div class="card-footer">
                 <a href="{{ route('booking.detail', $booking->id_peminjaman) }}" class="btn btn-outline-blue">Detail</a>
+                <a href="{{ route('booking.review.form', $booking->id_peminjaman) }}" class="btn btn-solid-blue">
+                    {{ $booking->review ? 'Edit Review' : 'Add Review' }}
+                </a>
             </div>
         </div>
     @endforeach

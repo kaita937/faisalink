@@ -94,7 +94,11 @@
                             </div>
                             <div class="card-rating">
                                 <span class="star">&#9733;</span>
-                                <span>4.8</span>
+                                @if(($f->reviews_count ?? 0) > 0)
+                                    <span>{{ number_format($f->average_rating, 1) }}</span>
+                                @else
+                                    <span>-</span>
+                                @endif
                             </div>
                             <div class="card-status">
                                 <span class="badge {{ $statusClass }}">{{ $statusText }}</span>

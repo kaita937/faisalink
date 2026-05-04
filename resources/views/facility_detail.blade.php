@@ -124,7 +124,14 @@
                     </div>
                     <div class="info-item">
                         <div class="info-label">Rating</div>
-                        <div class="info-value" style="color: #ffaa00;">&#9733; 4.8 / 5.0</div>
+                        <div class="info-value">
+                            @if(($reviewsCount ?? 0) > 0)
+                                <span class="rating-score">{{ number_format($averageRating, 1) }} / 5</span>
+                                <span class="rating-count">({{ $reviewsCount }} review)</span>
+                            @else
+                                <span class="rating-empty">No ratings yet</span>
+                            @endif
+                        </div>
                     </div>
                 </div>
 
@@ -182,6 +189,24 @@
                     </div>
                 @else
                     <p style="color: #888; font-style: italic;">Belum ada booking yang disetujui untuk fasilitas ini.</p>
+                @endif
+
+                <div class="section-title">Rating & Review</div>
+                @if(isset($reviews) && $reviews->count() > 0)
+                    <div class="review-list">
+                        @foreach($reviews as $review)
+                            <div class="review-item">
+                                <div class="review-header">
+                                    <div class="reviewer-name">{{ $review->peminjam->nama_peminjam ?? 'Pengguna' }}</div>
+                                    <div class="review-rating">{{ $review->rating }} / 5</div>
+                                </div>
+                                <div class="review-date">{{ optional($review->created_at)->translatedFormat('d M Y') }}</div>
+                                <div class="review-comment">{{ $review->komentar }}</div>
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <p style="color: #888; font-style: italic;">Belum ada rating atau review untuk fasilitas ini.</p>
                 @endif
 
                 <div class="booking-action">

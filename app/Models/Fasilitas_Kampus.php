@@ -27,4 +27,9 @@ class Fasilitas_Kampus extends Model
     {
         return $this->hasMany(Perlengkapan_Fasilitas_Kampus::class, 'id_fasilitas', 'id_fasilitas');
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review_Fasilitas::class, 'id_fasilitas', 'id_fasilitas');
+    }
 }
