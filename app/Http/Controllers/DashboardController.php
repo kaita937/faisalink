@@ -103,13 +103,14 @@ class DashboardController extends Controller
     {
         $user = Auth::guard('peminjam')->user();
 
-        $validated = $request->validate([
-            'nama_peminjam' => 'required|string|max:100',
-            'username' => 'required|string|max:50|unique:Peminjam,username,' . $user->id_peminjam . ',id_peminjam',
-            'email' => 'required|email|max:100|unique:Peminjam,email,' . $user->id_peminjam . ',id_peminjam',
-            'contact' => 'nullable|string|max:20',
-            'avatar' => 'nullable|image|max:2048'
-        ]);
+$validated = $request->validate([
+    'nama_peminjam' => 'required|string|max:100',
+    'username' => 'required|string|max:50|unique:Peminjam,username,' . $user->id_peminjam . ',id_peminjam',
+    'nomor_identitas' => 'required|string|max:50|unique:Peminjam,nomor_identitas,' . $user->id_peminjam . ',id_peminjam',
+    'email' => 'required|email|max:100|unique:Peminjam,email,' . $user->id_peminjam . ',id_peminjam',
+    'contact' => 'nullable|string|max:20',
+    'avatar' => 'nullable|image|max:2048'
+]);
 
         if (isset($validated['avatar'])) {
             unset($validated['avatar']);
