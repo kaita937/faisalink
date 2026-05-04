@@ -16,6 +16,7 @@ class Peminjam extends Authenticatable
 
     protected $fillable = [
         'nama_peminjam',
+        'nomor_identitas',
         'username',
         'email',
         'contact',
