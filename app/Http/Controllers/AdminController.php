@@ -9,6 +9,7 @@ use App\Models\PeminjamNotification;
 use App\Models\Fasilitas_Kampus;
 use App\Models\Perlengkapan_Fasilitas_Kampus;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
@@ -60,14 +61,25 @@ class AdminController extends Controller
     /**
      * Setujui peminjaman
      */
-    public function approveBooking($id)
+    public function approveBooking(Request $request, $id)
     {
+        $request->validate([
+            'bukti_peminjaman' => 'required|file|mimes:pdf,doc,docx|max:2048',
+        ]);
+
         $admin = Auth::guard('admin')->user();
         $booking = Peminjaman::with('fasilitas')->findOrFail($id);
+
+        if ($booking->bukti_peminjaman_path) {
+            Storage::disk('public')->delete($booking->bukti_peminjaman_path);
+        }
+
+        $path = $request->file('bukti_peminjaman')->store('bukti-peminjaman', 'public');
 
         $booking->update([
             'status_peminjaman' => 'Disetujui',
             'id_admin' => $admin->id_admin,
+            'bukti_peminjaman_path' => $path,
         ]);
 
         PeminjamNotification::create([
@@ -79,7 +91,7 @@ class AdminController extends Controller
             'url' => route('booking.detail', $booking->id_peminjaman),
         ]);
 
-        return redirect()->back()->with('success', 'Peminjaman berhasil disetujui.');
+        return redirect()->back()->with('success', 'Peminjaman berhasil disetujui dan surat bukti diunggah.');
     }
 
     /**
@@ -110,6 +122,29 @@ class AdminController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Peminjaman telah ditolak dengan alasan.');
+    }
+
+    public function uploadBuktiPeminjaman(Request $request, $id)
+    {
+        $request->validate([
+            'bukti_peminjaman' => 'required|file|mimes:pdf,doc,docx|max:2048',
+        ]);
+
+        $admin = Auth::guard('admin')->user();
+        $booking = Peminjaman::findOrFail($id);
+
+        if ($booking->bukti_peminjaman_path) {
+            Storage::disk('public')->delete($booking->bukti_peminjaman_path);
+        }
+
+        $path = $request->file('bukti_peminjaman')->store('bukti-peminjaman', 'public');
+
+        $booking->update([
+            'bukti_peminjaman_path' => $path,
+            'id_admin' => $admin->id_admin,
+        ]);
+
+        return redirect()->back()->with('success', 'Surat bukti peminjaman berhasil diunggah.');
     }
 
     // Fasilitas CRUD

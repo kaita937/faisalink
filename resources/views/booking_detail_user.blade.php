@@ -147,6 +147,19 @@
                 </div>
                 @endif
                 @endif
+
+                @if($booking->bukti_peminjaman_path)
+                <div class="proposal-box" style="margin-top: 20px;">
+                    <div class="proposal-info">
+                        <div class="proposal-icon">&#128196;</div>
+                        <div class="proposal-text">
+                            <h4>Surat Bukti Peminjaman</h4>
+                            <p>Silakan unduh surat bukti peminjaman Anda.</p>
+                        </div>
+                    </div>
+                    <a href="{{ asset('storage/' . $booking->bukti_peminjaman_path) }}" target="_blank" class="btn btn-outline">Buka Surat Bukti</a>
+                </div>
+                @endif
             </div>
         </div>
     </div>

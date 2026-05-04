@@ -20,6 +20,7 @@ class Peminjaman extends Model
         'jam_selesai',
         'status_peminjaman',
         'administrasi_peminjaman',
+        'bukti_peminjaman_path',
         'keterangan',
         'keperluan',
         'alasan_penolakan'
