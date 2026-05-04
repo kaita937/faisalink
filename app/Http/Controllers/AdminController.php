@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Peminjaman;
+use App\Models\Peminjam;
 use App\Models\PeminjamNotification;
 use App\Models\Fasilitas_Kampus;
 use App\Models\Perlengkapan_Fasilitas_Kampus;
@@ -328,4 +329,22 @@ class AdminController extends Controller
 
         return redirect()->route('admin.equipment.index')->with('success', 'Perlengkapan berhasil dihapus.');
     }
+
+    public function usersIndex()
+    {
+        $admin = Auth::guard('admin')->user();
+        $users = Peminjam::orderBy('nama_peminjam')->get();
+
+        return view('dashboard.user', compact('admin', 'users'));
+    }
+
+    public function usersDestroy($id)
+    {
+        $user = Peminjam::findOrFail($id);
+        $user->delete();
+
+        return redirect()->route('admin.users.index')->with('success', 'User berhasil dihapus.');
+    }
+
+    
 }
