@@ -358,8 +358,9 @@ header {
 
 .greeting-image img {
     width: 100%;
-    max-width: 300px;
+    max-width: none;
     height: auto;
+    display: block;
 }
 
 /* Stats Section */

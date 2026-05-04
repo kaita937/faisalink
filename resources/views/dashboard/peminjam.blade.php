@@ -21,7 +21,7 @@
                 <p class="tagline">Smart Way to Book Fasilkom Facilities!</p>
             </div>
             <div class="greeting-image">
-                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 200'%3E%3Crect fill='%23e0e0e0' width='300' height='200'/%3E%3Ctext x='50%' y='50%' text-anchor='middle' dy='.3em' fill='%23999' font-size='20'%3EFasilitas Gedung%3C/text%3E%3C/svg%3E" alt="Facilities">
+                <img src="{{ asset('Icon/gedung.png') }}" alt="Facilities">
             </div>
         </div>
 
