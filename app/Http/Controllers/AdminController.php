@@ -180,6 +180,24 @@ class AdminController extends Controller
         return redirect()->route('admin.facilities.index')->with('success', 'Fasilitas berhasil dihapus.');
     }
 
+    public function facilityEquipment($id)
+    {
+        $admin = Auth::guard('admin')->user();
+        $facility = Fasilitas_Kampus::with('perlengkapan')->findOrFail($id);
+        
+        // Statistik untuk layout
+        $totalPeminjaman = Peminjaman::count();
+        $peminjamanbaru = Peminjaman::where('status_peminjaman', 'Pending')->count();
+        $peminjamanditerima = Peminjaman::where('status_peminjaman', 'Disetujui')->count();
+        $pendingBookings = Peminjaman::with('peminjam', 'fasilitas')
+            ->where('status_peminjaman', 'Pending')
+            ->orderBy('tanggal_pengajuan', 'asc')
+            ->limit(5)
+            ->get();
+            
+        return view('dashboard.facility_equipment', compact('admin', 'facility', 'totalPeminjaman', 'peminjamanbaru', 'peminjamanditerima', 'pendingBookings'));
+    }
+
     // Perlengkapan CRUD
     public function equipmentIndex()
     {
@@ -199,10 +217,11 @@ class AdminController extends Controller
         return view('dashboard.equipment', compact('admin', 'equipment', 'totalPeminjaman', 'peminjamanbaru', 'peminjamanditerima', 'pendingBookings'));
     }
 
-    public function equipmentCreate()
+    public function equipmentCreate(Request $request)
     {
         $admin = Auth::guard('admin')->user();
         $facilities = Fasilitas_Kampus::all();
+        $selectedFacilityId = $request->query('facility_id');
         
         // Statistik untuk layout
         $totalPeminjaman = Peminjaman::count();
@@ -214,7 +233,7 @@ class AdminController extends Controller
             ->limit(5)
             ->get();
         
-        return view('dashboard.equipment_create', compact('admin', 'facilities', 'totalPeminjaman', 'peminjamanbaru', 'peminjamanditerima', 'pendingBookings'));
+        return view('dashboard.equipment_create', compact('admin', 'facilities', 'selectedFacilityId', 'totalPeminjaman', 'peminjamanbaru', 'peminjamanditerima', 'pendingBookings'));
     }
 
     public function equipmentStore(Request $request)
@@ -228,14 +247,19 @@ class AdminController extends Controller
 
         Perlengkapan_Fasilitas_Kampus::create($request->all());
 
+        if ($request->has('redirect_to')) {
+            return redirect($request->redirect_to)->with('success', 'Perlengkapan berhasil ditambahkan.');
+        }
+
         return redirect()->route('admin.equipment.index')->with('success', 'Perlengkapan berhasil ditambahkan.');
     }
 
-    public function equipmentEdit($id)
+    public function equipmentEdit(Request $request, $id)
     {
         $admin = Auth::guard('admin')->user();
         $equipment = Perlengkapan_Fasilitas_Kampus::findOrFail($id);
         $facilities = Fasilitas_Kampus::all();
+        $redirectTo = $request->query('redirect_to');
         
         // Statistik untuk layout
         $totalPeminjaman = Peminjaman::count();
@@ -247,7 +271,7 @@ class AdminController extends Controller
             ->limit(5)
             ->get();
         
-        return view('dashboard.equipment_edit', compact('admin', 'equipment', 'facilities', 'totalPeminjaman', 'peminjamanbaru', 'peminjamanditerima', 'pendingBookings'));
+        return view('dashboard.equipment_edit', compact('admin', 'equipment', 'facilities', 'redirectTo', 'totalPeminjaman', 'peminjamanbaru', 'peminjamanditerima', 'pendingBookings'));
     }
 
     public function equipmentUpdate(Request $request, $id)
@@ -262,13 +286,21 @@ class AdminController extends Controller
         $equipment = Perlengkapan_Fasilitas_Kampus::findOrFail($id);
         $equipment->update($request->all());
 
+        if ($request->has('redirect_to')) {
+            return redirect($request->redirect_to)->with('success', 'Perlengkapan berhasil diperbarui.');
+        }
+
         return redirect()->route('admin.equipment.index')->with('success', 'Perlengkapan berhasil diperbarui.');
     }
 
-    public function equipmentDestroy($id)
+    public function equipmentDestroy(Request $request, $id)
     {
         $equipment = Perlengkapan_Fasilitas_Kampus::findOrFail($id);
         $equipment->delete();
+
+        if ($request->has('redirect_to')) {
+            return redirect($request->redirect_to)->with('success', 'Perlengkapan berhasil dihapus.');
+        }
 
         return redirect()->route('admin.equipment.index')->with('success', 'Perlengkapan berhasil dihapus.');
     }

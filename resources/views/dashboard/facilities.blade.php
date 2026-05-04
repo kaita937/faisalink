@@ -36,7 +36,8 @@
                     <td class="px-6 py-4">{{ Str::limit($facility->deskripsi, 50) }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         <div style="display: flex; gap: 8px;">
-                            <a href="{{ route('admin.facilities.edit', $facility->id_fasilitas) }}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Edit</a>
+                            <a href="{{ route('admin.facilities.equipment', $facility->id_fasilitas) }}" class="btn" style="background-color: #2e66ff; color: white; padding: 6px 12px; font-size: 0.8rem;">Perlengkapan</a>
+                            <a href="{{ route('admin.facilities.edit', $facility->id_fasilitas) }}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem; background-color: #ffaa00; border-color: #ffaa00;">Edit</a>
                             <form action="{{ route('admin.facilities.destroy', $facility->id_fasilitas) }}" method="POST" class="inline">
                                 @csrf
                                 @method('DELETE')

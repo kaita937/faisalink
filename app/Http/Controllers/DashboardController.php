@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Fasilitas_Kampus;
 use App\Models\Peminjaman;
+use App\Models\Perlengkapan_Fasilitas_Kampus;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -130,6 +131,9 @@ class DashboardController extends Controller
         $totalPeminjaman = Peminjaman::count();
         $peminjamanbaru = Peminjaman::where('status_peminjaman', 'Pending')->count();
         $peminjamanditerima = Peminjaman::where('status_peminjaman', 'Disetujui')->count();
+        $peminjamanditolak = Peminjaman::where('status_peminjaman', 'Ditolak')->count();
+        $totalFasilitas = Fasilitas_Kampus::count();
+        $totalPerlengkapan = Perlengkapan_Fasilitas_Kampus::sum('jumlah');
         
         // Ambil pending peminjaman
         $pendingBookings = Peminjaman::with('peminjam', 'fasilitas')
@@ -138,6 +142,15 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
         
-        return view('dashboard.admin', compact('admin', 'totalPeminjaman', 'peminjamanbaru', 'peminjamanditerima', 'pendingBookings'));
+        return view('dashboard.admin', compact(
+            'admin', 
+            'totalPeminjaman', 
+            'peminjamanbaru', 
+            'peminjamanditerima', 
+            'peminjamanditolak',
+            'totalFasilitas',
+            'totalPerlengkapan',
+            'pendingBookings'
+        ));
     }
 }
