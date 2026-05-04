@@ -12,6 +12,30 @@ use Illuminate\Support\Facades\Auth;
 class AdminController extends Controller
 {
     /**
+     * Menampilkan daftar peminjaman (opsional filter status)
+     */
+    public function bookingsIndex(Request $request)
+    {
+        $admin = Auth::guard('admin')->user();
+        $status = $request->query('status', 'all');
+        $allowedStatuses = ['Pending', 'Disetujui', 'Ditolak'];
+
+        if (!in_array($status, $allowedStatuses, true)) {
+            $status = 'all';
+        }
+
+        $bookingsQuery = Peminjaman::with(['peminjam', 'fasilitas'])
+            ->orderBy('tanggal_pengajuan', 'desc');
+
+        if ($status !== 'all') {
+            $bookingsQuery->where('status_peminjaman', $status);
+        }
+
+        $bookings = $bookingsQuery->get();
+
+        return view('dashboard.booking_list', compact('admin', 'bookings', 'status'));
+    }
+    /**
      * Menampilkan detail peminjaman
      */
     public function bookingDetail($id)
