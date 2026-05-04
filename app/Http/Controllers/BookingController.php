@@ -37,6 +37,32 @@ class BookingController extends Controller
 
         $fasilitas = Fasilitas_Kampus::findOrFail($request->id_fasilitas);
 
+        // Cek jadwal bentrok dengan booking yang sudah disetujui pada fasilitas ini
+        $conflict = Peminjaman::where('id_fasilitas', $fasilitas->id_fasilitas)
+            ->where('status_peminjaman', 'Disetujui')
+            ->where('tanggal_peminjaman', $request->tanggal_peminjaman)
+            ->where(function ($query) use ($request) {
+                $query->where(function ($query) use ($request) {
+                    $query->where('jam_mulai', '<=', $request->jam_mulai)
+                        ->where('jam_selesai', '>', $request->jam_mulai);
+                })
+                ->orWhere(function ($query) use ($request) {
+                    $query->where('jam_mulai', '<', $request->jam_selesai)
+                        ->where('jam_selesai', '>=', $request->jam_selesai);
+                })
+                ->orWhere(function ($query) use ($request) {
+                    $query->where('jam_mulai', '>=', $request->jam_mulai)
+                        ->where('jam_selesai', '<=', $request->jam_selesai);
+                });
+            })
+            ->exists();
+
+        if ($conflict) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Maaf, sudah ada peminjaman yang disetujui untuk fasilitas ini pada tanggal dan jam yang sama atau saling bertumpuk. Silakan pilih jadwal lain.');
+        }
+
         // Upload file
         $filePath = null;
         if ($request->hasFile('administrasi_peminjaman')) {

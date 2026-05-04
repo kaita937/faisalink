@@ -23,8 +23,6 @@ class DashboardController extends Controller
             ->whereIn('status_peminjaman', ['Disetujui', 'Pending'])
             ->where('tanggal_peminjaman', '>=', $today)
             ->count();
-            
-        $totalAvailable = max(0, $totalFasilitas - $totalBooked);
         
         // Ambil upcoming bookings
         $upcomingBookings = Peminjaman::with('fasilitas')
@@ -36,7 +34,7 @@ class DashboardController extends Controller
         // Ambil semua fasilitas untuk kategori
         $fasilitas = Fasilitas_Kampus::all();
         
-        return view('dashboard.peminjam', compact('user', 'totalAvailable', 'totalBooked', 'upcomingBookings', 'fasilitas'));
+        return view('dashboard.peminjam', compact('user', 'totalFasilitas', 'totalBooked', 'upcomingBookings', 'fasilitas'));
     }
 
     public function facility($category = null)
@@ -72,7 +70,15 @@ class DashboardController extends Controller
     {
         $user = Auth::guard('peminjam')->user();
         $fasilitas = Fasilitas_Kampus::with('perlengkapan')->findOrFail($id);
-        return view('facility_detail', compact('user', 'fasilitas'));
+
+        $approvedBookings = Peminjaman::with('peminjam')
+            ->where('id_fasilitas', $id)
+            ->where('status_peminjaman', 'Disetujui')
+            ->orderBy('tanggal_peminjaman', 'asc')
+            ->orderBy('jam_mulai', 'asc')
+            ->get();
+
+        return view('facility_detail', compact('user', 'fasilitas', 'approvedBookings'));
     }
 
     public function profile()

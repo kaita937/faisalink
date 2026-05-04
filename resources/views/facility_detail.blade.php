@@ -147,6 +147,43 @@
                     <p style="color: #888; font-style: italic;">No specific equipment listed for this facility.</p>
                 @endif
 
+                <div class="section-title"><br>Daftar Booking yang Disetujui</div>
+                @if(isset($approvedBookings) && $approvedBookings->count() > 0)
+                    <div class="approved-booking-list">
+                        @foreach($approvedBookings as $booking)
+                            <div class="approved-booking-item">
+                                <div class="booking-avatar">
+                                    @if($booking->peminjam && $booking->peminjam->avatar_path)
+                                        <img src="{{ asset('storage/' . $booking->peminjam->avatar_path) }}" alt="{{ $booking->peminjam->nama_peminjam ?? 'User' }}">
+                                    @else
+                                        <div class="avatar-placeholder">{{ substr($booking->peminjam->nama_peminjam ?? 'U', 0, 1) }}</div>
+                                    @endif
+                                </div>
+                                <div class="booking-info">
+                                    <div class="booking-name">{{ $booking->peminjam->nama_peminjam ?? 'Pengguna' }}</div>
+                                    <div class="booking-identity">{{ $booking->peminjam->nomor_identitas ?? '-' }}</div>
+                                    <div class="booking-date">
+                                        <span class="date-icon">📅</span>
+                                        {{ \Carbon\Carbon::parse($booking->tanggal_peminjaman)->translatedFormat('l, d F Y') }}
+                                    </div>
+                                    <div class="booking-time">
+                                        <span class="time-icon">⏰</span>
+                                        {{ substr($booking->jam_mulai, 0, 5) }} - {{ substr($booking->jam_selesai, 0, 5) }} WIB
+                                    </div>
+                                    @if($booking->keperluan)
+                                    <div class="booking-purpose">
+                                        <span class="purpose-icon">📝</span>
+                                        {{ $booking->keperluan }}
+                                    </div>
+                                    @endif
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <p style="color: #888; font-style: italic;">Belum ada booking yang disetujui untuk fasilitas ini.</p>
+                @endif
+
                 <div class="booking-action">
                     @if(strtolower($fasilitas->status_fasilitas) == 'tersedia')
                         <a href="{{ route('booking.form', $fasilitas->id_fasilitas) }}" class="btn-book">Book This Facility</a>
