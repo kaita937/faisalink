@@ -113,9 +113,18 @@
                     </div>
 
                     <div class="final-actions">
-                        <form action="{{ route('admin.booking.approve', $booking->id_peminjaman) }}" method="POST">
+                        <form action="{{ route('admin.booking.approve', $booking->id_peminjaman) }}" method="POST" enctype="multipart/form-data" style="width: 100%;">
                             @csrf
-                            <button type="button" class="btn btn-approve" data-confirm="Apakah Anda yakin Sarpras sudah MENYETUJUI pengajuan ini?">✓ Setujui Pengajuan</button>
+                            <div style="margin-bottom: 20px; text-align: left;">
+                                <label for="bukti_peminjaman" style="display: block; margin-bottom: 5px; font-weight: 600; color: #4b5563;">Surat Bukti Peminjaman:</label>
+                                <div class = "file-upload-wrapper" style="position: relative;">
+                                    <input type="file" name="bukti_peminjaman"  class = "file-upload-text"id="bukti_peminjaman" accept=".pdf,.doc,.docx" required>
+                                </div>
+                            </div>
+                            <div id="bukti-peminjaman-error" style="margin-top: 6px; color: #c53030; font-size: 0.9rem; display: {{ $errors->has('bukti_peminjaman') ? 'block' : 'none' }};">
+                                    {{ $errors->first('bukti_peminjaman') ?? 'Surat bukti peminjaman is required.' }}
+                            </div>
+                            <button type="button" class="btn btn-approve" style="width: 100%;" data-confirm="Apakah Anda yakin Sarpras sudah MENYETUJUI pengajuan ini?">✓ Setujui Pengajuan</button>
                         </form>
                         <form action="{{ route('admin.booking.reject', $booking->id_peminjaman) }}" method="POST" style="width: 100%;">
                             @csrf
@@ -127,6 +136,15 @@
                         </form>
                     </div>
 
+                </div>
+                @elseif($booking->status_peminjaman === 'Disetujui')
+                <div style="margin-top: 30px;">
+                    <div style="margin-bottom: 15px; font-weight: 600; color: #374151;">Surat Bukti Peminjaman</div>
+                    @if($booking->bukti_peminjaman_path)
+                        <a href="{{ asset('storage/' . $booking->bukti_peminjaman_path) }}" target="_blank" class="btn btn-outline" style="margin-bottom: 12px;">Buka Surat Bukti</a>
+                    @else
+                        <div style="color: #6b7280;">Surat bukti belum tersedia.</div>
+                    @endif
                 </div>
                 @elseif($booking->status_peminjaman === 'Ditolak' && $booking->alasan_penolakan)
                 <div style="margin-top: 30px; padding: 20px; background-color: #fff5f5; border-radius: 8px; border: 1px solid #feb2b2;">
@@ -155,20 +173,23 @@
                 });
             @endif
 
-            @if($errors->any())
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Kesalahan Input',
-                    html: '<ul style="text-align:left;">@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>',
-                });
-            @endif
-
             document.body.addEventListener('click', function(e) {
                 const confirmEl = e.target.closest('[data-confirm]');
                 if (confirmEl) {
                     e.preventDefault();
                     const message = confirmEl.getAttribute('data-confirm');
                     const form = confirmEl.closest('form');
+                    const fileInput = form ? form.querySelector('input[type="file"][name="bukti_peminjaman"]') : null;
+                    const fileError = document.getElementById('bukti-peminjaman-error');
+
+                    if (fileInput && !fileInput.files.length) {
+                        if (fileError) {
+                            fileError.style.display = 'block';
+                            fileError.textContent = 'Surat bukti peminjaman is required.';
+                        }
+                        fileInput.focus();
+                        return;
+                    }
                     
                     Swal.fire({
                         title: 'Konfirmasi',
@@ -187,6 +208,16 @@
                     });
                 }
             });
+
+            const buktiInput = document.getElementById('bukti_peminjaman');
+            const buktiError = document.getElementById('bukti-peminjaman-error');
+            if (buktiInput && buktiError) {
+                buktiInput.addEventListener('change', function() {
+                    if (buktiInput.files.length) {
+                        buktiError.style.display = 'none';
+                    }
+                });
+            }
         });
     </script>
 </body>

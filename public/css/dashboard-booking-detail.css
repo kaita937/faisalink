@@ -229,6 +229,56 @@ header {
     display: flex;
     gap: 15px;
     justify-content: center;
+    
+}
+
+.file-upload {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 12px;
+    align-items: center;
+    padding: 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background-color: #f9fafb;
+}
+
+.file-upload-input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.file-upload-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 16px;
+    border-radius: 6px;
+    background-color: #2e66ff;
+    color: #ffffff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.file-upload-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(46, 102, 255, 0.25);
+}
+
+.file-upload-name {
+    color: #4b5563;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.file-upload-error {
+    margin-top: 6px;
+    color: #c53030;
+    font-size: 0.9rem;
 }
 
 .btn-approve {
@@ -257,6 +307,26 @@ header {
 
 .btn-logout:hover {
     background-color: #e69900;
+}
+
+.file-upload-text {
+    color: #666;
+    font-weight: 500;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.file-upload-wrapper {
+    position: relative;
+    padding: 15px;
+    border: 0.5px solid #d1d5db;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    transition: all 0.2s;
 }
 
 @media (max-width: 768px) {
