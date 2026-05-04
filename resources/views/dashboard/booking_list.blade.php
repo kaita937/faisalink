@@ -11,10 +11,10 @@
 <body>
     <!-- Header -->
     <header>
-        <div class="logo-section">
+        <a href="{{ route('dashboard.admin') }}" class="logo-section">
             <img src="{{ asset('Icon/logo.png') }}" alt="Faisalink">
             <span>Faisalink Admin</span>
-        </div>
+        </a>
         <nav class="admin-nav">
             <a href="{{ route('dashboard.admin') }}" class="nav-link {{ request()->routeIs('dashboard.admin') ? 'active' : '' }}">Dashboard</a>
             <a href="{{ route('admin.facilities.index') }}" class="nav-link {{ request()->routeIs('admin.facilities.*') ? 'active' : '' }}">Fasilitas</a>
