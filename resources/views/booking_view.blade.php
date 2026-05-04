@@ -41,7 +41,7 @@
                     <p>ID : BK - {{ $booking->id_peminjaman }}</p>
                 </div>
                 <!-- Status Badge -->
-                @if($booking->status_peminjaman == 'pending')
+                @if($booking->status_peminjaman == 'Pending')
                     <div class="badge badge-pending"><div class="dot"></div>Pending</div>
                 @else
                     <div class="badge badge-approved"><div class="dot"></div>Approved</div>
@@ -247,6 +247,20 @@
                 updateNotificationCount();
             });
         }
+
+        document.querySelectorAll('button[data-confirm]').forEach((button) => {
+            button.addEventListener('click', () => {
+                const message = button.getAttribute('data-confirm');
+                if (message && !window.confirm(message)) {
+                    return;
+                }
+
+                const form = button.closest('form');
+                if (form) {
+                    form.submit();
+                }
+            });
+        });
 
         updateNotificationCount();
     });
