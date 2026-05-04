@@ -12,7 +12,7 @@
     <!-- Header -->
     <header>
         <div class="header-container">
-            <a href="{{ route('landing') }}" class="logo-section">
+            <a href="{{ route('dashboard.user') }}" class="logo-section">
                 <img src="{{ asset('Icon/logo.png') }}" alt="Faisalink">
                 <span>Faisalink</span>
             </a>
