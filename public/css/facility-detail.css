@@ -78,6 +78,36 @@ header {
     border-radius: 2px;
 }
 
+.search-box {
+    position: relative;
+    width: 240px;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 10px 15px 10px 40px;
+    border: 1px solid #ddd;
+    border-radius: 9999px;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-box input:focus {
+    border-color: #2e66ff;
+    box-shadow: 0 0 0 3px rgba(46, 102, 255, 0.1);
+}
+
+.search-box .search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    font-size: 0.95rem;
+    pointer-events: none;
+}
+
 .notification-icon {
     font-size: 1.4rem;
     cursor: pointer;
