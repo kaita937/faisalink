@@ -101,9 +101,9 @@
                             <div class="approved-booking-item">
                                 <!-- Status Badge -->
                                 @if($booking->status_peminjaman == 'Pending')
-                                    <div class="badge badge-pending"><div class="dot"></div>Pending</div>
+                                    <div class="badge badge-pending "><div class="dot"></div>Pending</div>
                                 @else
-                                    <div class="badge badge-approved"><div class="dot"></div>Approved</div>
+                                    <div class="badge badge-approved "><div class="dot"></div>Approved</div>
                                 @endif
                                 <div class="booking-avatar">
                                     @if($booking->peminjam && $booking->peminjam->avatar_path)
