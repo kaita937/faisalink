@@ -10,68 +10,8 @@
 </head>
 <body>
     <!-- Header -->
-    <header>
-        <div class="header-container">
-            <a href="{{ route('dashboard.user') }}" class="logo-section">
-                <img src="{{ asset('Icon/logo.png') }}" alt="Faisalink">
-                <span>Faisalink</span>
-            </a>
-            <ul class="nav-links">
-                <li><a href="{{ route('dashboard.user') }}">Home</a></li>
-                <li><a href="{{ route('facility') }}" class="active">Facilities</a></li>
+    <x-user-nav showSearch="true" />
 
-                <li><a href="{{ route('booking_view') }}">Booking</a></li>
-
-                <li><a href="{{ route('profile') }}">Profile</a></li>
-
-            </ul>
-            <div style="display: flex; gap: 12px; align-items: center;">
-                @php
-                    $notifications = $notifications ?? collect();
-                    $unreadCount = $unreadCount ?? $notifications->whereNull('read_at')->count();
-                @endphp
-                <div class="notification-wrapper">
-                    <button class="notification-icon" id="notificationToggle" type="button" aria-label="Notifications">
-                        &#128276;
-                        <span class="notification-badge" id="notificationCount" style="display: {{ $unreadCount > 0 ? 'inline-flex' : 'none' }};">{{ $unreadCount }}</span>
-                    </button>
-                    <div class="notification-panel" id="notificationPanel">
-                        <div class="notification-header">
-                            <div class="notification-title">Notification</div>
-                            <button class="notification-action" id="notificationMarkAll" type="button">Mark all as read</button>
-                        </div>
-                        <div class="notification-list" id="notificationList">
-                            @forelse ($notifications as $notification)
-                                @php
-                                    $type = $notification->type ?? 'info';
-                                    $isRead = !empty($notification->read_at);
-                                    $notificationUrl = $notification->url ?: '#';
-                                @endphp
-                                <a href="{{ $notificationUrl }}" class="notification-item {{ $type }} {{ $isRead ? 'read' : '' }}" data-id="{{ $notification->id }}">
-                                    <div class="notification-icon-bubble {{ $type }}">
-                                        @if ($type === 'success')
-                                            &#10003;
-                                        @elseif ($type === 'warning')
-                                            &#9200;
-                                        @else
-                                            &#8505;
-                                        @endif
-                                    </div>
-                                    <div class="notification-text">
-                                        <h4>{{ $notification->title ?? 'Update' }}</h4>
-                                        <p>{{ $notification->message ?? '-' }}</p>
-                                        <div class="notification-time">{{ optional($notification->created_at)->diffForHumans() ?? 'baru saja' }}</div>
-                                    </div>
-                                </a>
-                            @empty
-                                <div class="notification-empty">Belum ada notifikasi.</div>
-                            @endforelse
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
 
     @php
         $statusClass = match(strtolower($fasilitas->status_fasilitas)) {

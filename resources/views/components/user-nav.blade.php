@@ -1,5 +1,6 @@
 @props([
-    'searchInputId' => null
+    'searchInputId' => null,
+    'showSearch' => true
 ])
 
 <header>
@@ -13,7 +14,7 @@
                 <a href="{{ route('dashboard.user') }}" class="{{ request()->routeIs('dashboard.user') ? 'active' : '' }}">Home</a>
             </li>
             <li>
-                <a href="{{ route('facility') }}" class="{{ request()->routeIs('facility') ? 'active' : '' }}">Facilities</a>
+                <a href="{{ route('facility') }}" class="{{ request()->routeIs('facility') || request()->routeIs('facility.detail') ? 'active' : '' }}">Facilities</a>
             </li>
             <li>
                 <a href="{{ route('booking_view') }}" class="{{ request()->routeIs('booking_view') ? 'active' : '' }}">Booking</a>
@@ -25,7 +26,9 @@
         <div style="display: flex; gap: 20px; align-items: center;">
             
             <!-- Search component (Blade) -->
+            @if($showSearch)
             @include('components.⚡facility-search', ['searchInputId' => $searchInputId])
+            @endif
 
             @php
                 $notifications = $notifications ?? [

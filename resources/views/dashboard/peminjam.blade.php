@@ -29,7 +29,7 @@
         <div class="stats-section">
             <div class="stat-card available">
                 <div class="stat-number">{{ $totalFasilitas }}</div>
-                <div class="stat-label">Total Vuilding</div>
+                <div class="stat-label">Total Building</div>
             </div>
             <div class="stat-card booked">
                 <div class="stat-number">{{ $totalBooked }}</div>
