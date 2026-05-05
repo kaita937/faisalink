@@ -90,7 +90,10 @@ class DashboardController extends Controller
         $averageRating = $reviews->avg('rating');
         $reviewsCount = $reviews->count();
 
-        return view('facility_detail', compact('user', 'fasilitas', 'approvedBookings', 'reviews', 'averageRating', 'reviewsCount'));
+        $notifications = \App\Models\PeminjamNotification::where('id_peminjam', $user->id_peminjam)->orderBy('created_at', 'desc')->get();
+        $unreadCount = $notifications->whereNull('read_at')->count();
+
+        return view('facility_detail', compact('user', 'fasilitas', 'approvedBookings', 'reviews', 'averageRating', 'reviewsCount', 'notifications', 'unreadCount'));
     }
 
     public function profile()
