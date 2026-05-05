@@ -13,9 +13,9 @@ class BookingController extends Controller
     {
         $user = Auth::guard('peminjam')->user();
         $fasilitas = Fasilitas_Kampus::findOrFail($id);
-        
+
         // Cek jika fasilitas tersedia
-        if (strtolower($fasilitas->status_fasilitas) != 'tersedia') {
+        if (strtolower($fasilitas->status_fasilitas) !== 'tersedia') {
             return redirect()->back()->with('error', 'Fasilitas ini sedang tidak tersedia untuk dipinjam.');
         }
 
@@ -32,42 +32,51 @@ class BookingController extends Controller
             'jam_mulai' => 'required|date_format:H:i',
             'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
             'keperluan' => 'required|string',
-            'administrasi_peminjaman' => 'required|file|mimes:pdf,doc,docx|max:2048', // Maksimal 2MB
+            'administrasi_peminjaman' => 'required|file|mimes:pdf,doc,docx|max:2048',
         ]);
 
         $fasilitas = Fasilitas_Kampus::findOrFail($request->id_fasilitas);
 
-        // Cek jadwal bentrok dengan booking yang sudah disetujui pada fasilitas ini
+        // Cek ulang status fasilitas pada saat submit agar tidak hanya bergantung pada halaman form.
+        if (strtolower($fasilitas->status_fasilitas) !== 'tersedia') {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Fasilitas ini sedang tidak tersedia untuk dipinjam.');
+        }
+
+        /*
+         * Cek jadwal bentrok.
+         *
+         * Aturan overlap:
+         * - Bentrok jika jam_mulai booking lama < jam_selesai pengajuan baru
+         *   DAN jam_selesai booking lama > jam_mulai pengajuan baru.
+         *
+         * Status yang diblok:
+         * - Pending: agar tidak ada dua pengajuan menunggu untuk slot yang sama.
+         * - Disetujui: agar tidak menimpa booking yang sudah diterima.
+         *
+         * Status Ditolak tidak diblok supaya slot bisa diajukan kembali.
+         */
         $conflict = Peminjaman::where('id_fasilitas', $fasilitas->id_fasilitas)
-            ->where('status_peminjaman', 'Disetujui')
+            ->whereIn('status_peminjaman', ['Pending', 'Disetujui'])
             ->where('tanggal_peminjaman', $request->tanggal_peminjaman)
             ->where(function ($query) use ($request) {
-                $query->where(function ($query) use ($request) {
-                    $query->where('jam_mulai', '<=', $request->jam_mulai)
-                        ->where('jam_selesai', '>', $request->jam_mulai);
-                })
-                ->orWhere(function ($query) use ($request) {
-                    $query->where('jam_mulai', '<', $request->jam_selesai)
-                        ->where('jam_selesai', '>=', $request->jam_selesai);
-                })
-                ->orWhere(function ($query) use ($request) {
-                    $query->where('jam_mulai', '>=', $request->jam_mulai)
-                        ->where('jam_selesai', '<=', $request->jam_selesai);
-                });
+                $query->where('jam_mulai', '<', $request->jam_selesai)
+                    ->where('jam_selesai', '>', $request->jam_mulai);
             })
             ->exists();
 
         if ($conflict) {
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Maaf, sudah ada peminjaman yang disetujui untuk fasilitas ini pada tanggal dan jam yang sama atau saling bertumpuk. Silakan pilih jadwal lain.');
+                ->with('error', 'Maaf, sudah ada pengajuan atau peminjaman yang menunggu/disetujui untuk fasilitas ini pada tanggal dan jam yang saling bertumpuk. Silakan pilih jadwal lain.');
         }
 
         // Upload file
         $filePath = null;
+
         if ($request->hasFile('administrasi_peminjaman')) {
             $file = $request->file('administrasi_peminjaman');
-            // Simpan di public/storage/administrasi
             $fileName = time() . '_' . $file->getClientOriginalName();
             $filePath = $file->storeAs('administrasi', $fileName, 'public');
         }
@@ -76,7 +85,7 @@ class BookingController extends Controller
         Peminjaman::create([
             'id_fasilitas' => $fasilitas->id_fasilitas,
             'id_peminjam' => $user->id_peminjam,
-            'id_admin' => null, // Akan diisi oleh admin yang menyetujui
+            'id_admin' => null,
             'tanggal_pengajuan' => now()->toDateString(),
             'tanggal_peminjaman' => $request->tanggal_peminjaman,
             'jam_mulai' => $request->jam_mulai,

@@ -697,3 +697,36 @@ footer a:hover {
         font-size: 2rem;
     }
 }
+
+/* Styling Badge Status */
+    .badge {
+        display: flex;
+        align-items: center;
+        padding: 10px 12px;
+        border-radius: 50px;
+        font-size: 10px;
+        font-weight: bold;
+    }
+    .badge-pending {
+        background-color: #fef3c7;
+        color: #d97706;
+    }
+    .badge-pending .dot { background-color: #facc15; }
+    
+    .badge-approved {
+        background-color: #dcfce7;
+        color: #16a34a;
+    }
+    .badge-approved .dot { background-color: #22c55e; }
+    
+    .badge-past {
+        background-color: #d3d3d3;
+        color: #676a68;
+    }
+    .badge-past .dot { background-color: #303231; }
+
+    .badge-cancelled {
+        background-color: #fee2e2;
+        color: #bc3333;
+    }
+    .badge-cancelled .dot { background-color: #f90000; }

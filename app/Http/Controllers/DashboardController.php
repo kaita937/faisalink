@@ -75,9 +75,9 @@ class DashboardController extends Controller
         $user = Auth::guard('peminjam')->user();
         $fasilitas = Fasilitas_Kampus::with('perlengkapan')->findOrFail($id);
 
-        $approvedBookings = Peminjaman::with('peminjam')
+        $approvedAndPendingBookings = Peminjaman::with('peminjam')
             ->where('id_fasilitas', $id)
-            ->where('status_peminjaman', 'Disetujui')
+            ->whereIn('status_peminjaman', ['Disetujui', 'Pending'])
             ->orderBy('tanggal_peminjaman', 'asc')
             ->orderBy('jam_mulai', 'asc')
             ->get();
@@ -90,6 +90,7 @@ class DashboardController extends Controller
         $averageRating = $reviews->avg('rating');
         $reviewsCount = $reviews->count();
 
+        return view('facility_detail', compact('user', 'fasilitas', 'approvedAndPendingBookings', 'reviews', 'averageRating', 'reviewsCount'));
         $notifications = \App\Models\PeminjamNotification::where('id_peminjam', $user->id_peminjam)->orderBy('created_at', 'desc')->get();
         $unreadCount = $notifications->whereNull('read_at')->count();
 
