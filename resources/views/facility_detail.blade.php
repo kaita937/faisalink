@@ -154,11 +154,17 @@
                     <p style="color: #888; font-style: italic;">No specific equipment listed for this facility.</p>
                 @endif
 
-                <div class="section-title"><br>Daftar Booking yang Disetujui</div>
-                @if(isset($approvedBookings) && $approvedBookings->count() > 0)
+                <div class="section-title"><br>Daftar Booking yang Disetujui / Pending</div>
+                @if(isset($approvedAndPendingBookings) && $approvedAndPendingBookings->count() > 0)
                     <div class="approved-booking-list">
-                        @foreach($approvedBookings as $booking)
+                        @foreach($approvedAndPendingBookings as $booking)
                             <div class="approved-booking-item">
+                                <!-- Status Badge -->
+                                @if($booking->status_peminjaman == 'Pending')
+                                    <div class="badge badge-pending"><div class="dot"></div>Pending</div>
+                                @else
+                                    <div class="badge badge-approved"><div class="dot"></div>Approved</div>
+                                @endif
                                 <div class="booking-avatar">
                                     @if($booking->peminjam && $booking->peminjam->avatar_path)
                                         <img src="{{ asset('storage/' . $booking->peminjam->avatar_path) }}" alt="{{ $booking->peminjam->nama_peminjam ?? 'User' }}">
