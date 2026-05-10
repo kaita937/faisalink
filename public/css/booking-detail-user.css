@@ -342,6 +342,10 @@ header {
     background-color: #0ea5e9;
 }
 
+.status-badge.status-contacting {
+    background-color: #2563eb;
+}
+
 .card-body {
     padding: 30px;
 }

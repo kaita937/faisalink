@@ -13,7 +13,7 @@ return new class extends Migration
             $table->string('nama_fasilitas', 100);
             $table->string('lokasi_fasilitas', 100);
             $table->integer('kapasitas')->nullable();
-            $table->string('status_fasilitas', 50)->nullable();
+            $table->enum('status_fasilitas', ['tersedia', 'maintenance'])->nullable();
             $table->text('deskripsi')->nullable();
         });
     }

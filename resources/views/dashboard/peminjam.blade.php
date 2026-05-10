@@ -82,7 +82,7 @@
                             <p>⏰ {{ $booking->jam_mulai }} - {{ $booking->jam_selesai }}</p>
                             <p>📌 {{ $booking->keperluan }}</p>
                         </div>
-                        <span class="status-badge status-{{ strtolower(str_replace('ü', 'u', $booking->status_peminjaman)) }}">
+                        <span class="status-badge status-{{ strtolower(str_replace(['ü', ' '], ['u', '-'], $booking->status_peminjaman)) }}">
                             {{ $booking->status_peminjaman }}
                         </span>
                     </div>

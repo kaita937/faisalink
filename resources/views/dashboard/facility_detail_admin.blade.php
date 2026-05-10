@@ -6,12 +6,31 @@
     <title>{{ $fasilitas->nama_fasilitas }} - Faisalink</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/facility-detail.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/facility-detail-admin.css') }}">
 </head>
 <body>
+    
     <!-- Header -->
-    <x-user-nav showSearch="true" />
-
+    <header>
+        <a href="{{ route('dashboard.admin') }}" class="logo-section">
+            <img src="{{ asset('Icon/logo.png') }}" alt="Faisalink">
+            <span>Faisalink Admin</span>
+        </a>
+        <nav class="admin-nav">
+            <a href="{{ route('dashboard.admin') }}" class="nav-link {{ request()->routeIs('dashboard.admin') ? 'active' : '' }}">Dashboard</a>
+            <a href="{{ route('admin.facilities.index') }}" class="nav-link {{ request()->routeIs('admin.facilities.*') ? 'active' : '' }}">Fasilitas</a>
+            <a href="{{ route('admin.equipment.index') }}" class="nav-link {{ request()->routeIs('admin.equipment.*') ? 'active' : '' }}">Perlengkapan</a>
+            <a href="{{ route('admin.users.index') }}" class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">User</a>
+            <a href="{{ route('facility_admin') }}" class="nav-link {{ request()->routeIs('facility_admin') ? 'active' : '' }}">Ruangan</a>
+        </nav>
+        <div class="admin-info">
+            <span>Welcome, {{ $admin->nama_admin }}</span>
+            <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                @csrf
+                <button type="submit" class="btn btn-logout">Logout</button>
+            </form>
+        </div>
+    </header>  
 
     @php
         $statusClass = match(strtolower($fasilitas->status_fasilitas)) {
@@ -31,7 +50,7 @@
 
     <!-- Main Content -->
     <div class="main-container">
-        <a href="{{ route('facility') }}" class="back-link">
+        <a href="{{ route('facility_admin') }}" class="back-link">
             <span>&larr;</span> Back to Facilities
         </a>
 
@@ -118,11 +137,12 @@
                                     <div class="booking-name">{{ $booking->peminjam->nama_peminjam ?? 'Pengguna' }}</div>
                                     <div class="booking-identity">{{ $booking->peminjam->nomor_identitas ?? '-' }}</div>
                                     <div class="booking-date">
-                                        <span class="date-icon">📅</span>
+                                        <span class="date-icon">📅
                                         {{ \Carbon\Carbon::parse($booking->tanggal_peminjaman)->translatedFormat('l, d F Y') }}
                                         @if($booking->tanggal_selesai && $booking->tanggal_selesai != $booking->tanggal_peminjaman)
-                                            - {{ \Carbon\Carbon::parse($booking->tanggal_selesai)->translatedFormat('l, d F Y') }}
+                                        - {{ \Carbon\Carbon::parse($booking->tanggal_selesai)->translatedFormat('l, d F Y') }}
                                         @endif
+                                        </span>
                                     </div>
                                     <div class="booking-time">
                                         <span class="time-icon">⏰</span>
@@ -159,27 +179,13 @@
                 @else
                     <p style="color: #888; font-style: italic;">Belum ada rating atau review untuk fasilitas ini.</p>
                 @endif
-
-                <div class="booking-action">
-                    @if(strtolower($fasilitas->status_fasilitas) == 'tersedia')
-                        <a href="{{ route('booking.form', $fasilitas->id_fasilitas) }}" class="btn-book">Book This Facility</a>
-                    @else
-                        <button class="btn-book disabled" disabled>Currently Unavailable</button>
-                    @endif
-                </div>
             </div>
         </div>
     </div>
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2026 Faisalink - Smart Facility Booking System</p>
-        <div style="display: flex; justify-content: center; gap: 20px; margin-top: 15px;">
-            <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                @csrf
-            </form>
-        </div>
+        <p>&copy; 2026 Faisalink - Smart Facility Booking System | Admin Panel</p>
     </footer>
 
     <script>

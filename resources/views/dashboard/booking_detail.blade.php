@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detail Pengajuan - Faisalink Admin</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/dashboard-booking-detail.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -32,10 +33,20 @@
 
         <!-- Flash Messages handled by SweetAlert2 -->
 
+        @php
+            $status = strtolower($booking->status_peminjaman ?? 'pending');
+            $statusClass = match ($status) {
+                'disetujui', 'approved' => 'status-approved',
+                'ditolak', 'rejected' => 'status-rejected',
+                'menghubungi sarpras' => 'status-contacting',
+                default => 'status-pending',
+            };
+        @endphp
+
         <div class="detail-card">
             <div class="card-header">
                 <h2>Detail Pengajuan Peminjaman</h2>
-                <span class="status-badge">{{ $booking->status_peminjaman }}</span>
+                <span class="status-badge {{ $statusClass }}" id="bookingStatusBadge">{{ $booking->status_peminjaman }}</span>
             </div>
 
             <div class="card-body">
@@ -58,7 +69,12 @@
                     </div>
                     <div class="info-item">
                         <h4>Tanggal Peminjaman</h4>
-                        <p>{{ \Carbon\Carbon::parse($booking->tanggal_peminjaman)->translatedFormat('l, d F Y') }}</p>
+                        <p>
+                            {{ \Carbon\Carbon::parse($booking->tanggal_peminjaman)->translatedFormat('l, d F Y') }}
+                            @if($booking->tanggal_selesai && $booking->tanggal_selesai != $booking->tanggal_peminjaman)
+                                - {{ \Carbon\Carbon::parse($booking->tanggal_selesai)->translatedFormat('l, d F Y') }}
+                            @endif
+                        </p>
                     </div>
                     <div class="info-item">
                         <h4>Waktu Peminjaman</h4>
@@ -83,7 +99,7 @@
                 </div>
                 @endif
 
-                @if($booking->status_peminjaman === 'Pending')
+                @if(in_array($booking->status_peminjaman, ['Pending', 'Menghubungi Sarpras'], true))
                 <div class="action-section">
                     
                     @php
@@ -103,7 +119,7 @@
 
                     <div class="wa-action">
                         <p>Langkah 1: Teruskan detail pengajuan ini ke WhatsApp Petugas Sarpras untuk meminta persetujuan.</p>
-                        <a href="https://wa.me/{{ $nomorWaSarpras }}?text={{ $pesanWa }}" target="_blank" class="btn btn-wa">
+                        <a href="https://wa.me/{{ $nomorWaSarpras }}?text={{ $pesanWa }}" target="_blank" class="btn btn-wa" data-contact-sarpras-url="{{ route('admin.booking.contactSarpras', $booking->id_peminjaman) }}">
                             💬 Teruskan ke WA Sarpras
                         </a>
                     </div>
@@ -165,6 +181,39 @@
                 timer: 3000,
                 timerProgressBar: true,
             });
+
+            const statusBadge = document.getElementById('bookingStatusBadge');
+            const contactButton = document.querySelector('[data-contact-sarpras-url]');
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+            if (contactButton && statusBadge && csrfToken) {
+                contactButton.addEventListener('click', () => {
+                    const updateUrl = contactButton.getAttribute('data-contact-sarpras-url');
+                    if (!updateUrl) {
+                        return;
+                    }
+
+                    fetch(updateUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken
+                        }
+                    })
+                    .then((response) => response.ok ? response.json() : null)
+                    .then((data) => {
+                        if (!data || !data.status) {
+                            return;
+                        }
+                        statusBadge.textContent = data.status;
+                        statusBadge.classList.remove('status-approved', 'status-rejected', 'status-pending', 'status-contacting');
+                        statusBadge.classList.add('status-contacting');
+                    })
+                    .catch(() => {
+                        // No-op: status will still be updated on page refresh if needed.
+                    });
+                });
+            }
 
             @if(session('success'))
                 Toast.fire({

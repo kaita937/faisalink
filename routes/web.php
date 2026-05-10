@@ -35,7 +35,7 @@ Route::middleware('auth:admin')->get('/dashboard/admin', [DashboardController::c
 Route::middleware('auth:peminjam')->get('/dashboard/user', [DashboardController::class, 'peminjamDashboard'])->name('dashboard.user');
 Route::middleware('auth:peminjam')->get('/profile', [DashboardController::class, 'profile'])->name('profile');
 Route::middleware('auth:peminjam')->post('/profile', [DashboardController::class, 'updateProfile'])->name('profile.update');
-Route::get('/facility/{id}', [DashboardController::class, 'facilityDetail'])->name('facility.detail');
+Route::get('/facility_user/{id}', [DashboardController::class, 'facilityDetail'])->name('facility.detail');
 
 // Rute Booking
 Route::middleware('auth:peminjam')->get('/booking/{id}', [\App\Http\Controllers\BookingController::class, 'showBookingForm'])->name('booking.form');
@@ -45,6 +45,7 @@ Route::middleware('auth:peminjam')->post('/booking', [\App\Http\Controllers\Book
 Route::middleware('auth:admin')->get('/admin/bookings', [\App\Http\Controllers\AdminController::class, 'bookingsIndex'])->name('admin.bookings.index');
 Route::middleware('auth:admin')->get('/admin/booking/{id}', [\App\Http\Controllers\AdminController::class, 'bookingDetail'])->name('admin.booking.detail');
 Route::middleware('auth:admin')->post('/admin/booking/{id}/upload-bukti', [\App\Http\Controllers\AdminController::class, 'uploadBuktiPeminjaman'])->name('admin.booking.uploadBukti');
+Route::middleware('auth:admin')->post('/admin/booking/{id}/contact-sarpras', [\App\Http\Controllers\AdminController::class, 'contactSarpras'])->name('admin.booking.contactSarpras');
 Route::middleware('auth:admin')->post('/admin/booking/{id}/approve', [\App\Http\Controllers\AdminController::class, 'approveBooking'])->name('admin.booking.approve');
 Route::middleware('auth:admin')->post('/admin/booking/{id}/reject', [\App\Http\Controllers\AdminController::class, 'rejectBooking'])->name('admin.booking.reject');
 
@@ -58,6 +59,8 @@ Route::middleware('auth:peminjam')->get('/booking/{id}/review', [ReviewControlle
 Route::middleware('auth:peminjam')->post('/booking/{id}/review', [ReviewController::class, 'store'])->name('booking.review.store');
 Route::middleware('auth:peminjam')->put('/booking/{id}/review', [ReviewController::class, 'update'])->name('booking.review.update');
 Route::middleware('auth:peminjam')->delete('/booking/{id}/review', [ReviewController::class, 'destroy'])->name('booking.review.destroy');
+
+
 // Rute Admin Fasilitas
 Route::middleware('auth:admin')->get('/admin/facilities', [\App\Http\Controllers\AdminController::class, 'facilitiesIndex'])->name('admin.facilities.index');
 Route::middleware('auth:admin')->get('/admin/facilities/create', [\App\Http\Controllers\AdminController::class, 'facilitiesCreate'])->name('admin.facilities.create');
@@ -75,7 +78,10 @@ Route::middleware('auth:admin')->get('/admin/equipment/{id}/edit', [\App\Http\Co
 Route::middleware('auth:admin')->put('/admin/equipment/{id}', [\App\Http\Controllers\AdminController::class, 'equipmentUpdate'])->name('admin.equipment.update');
 Route::middleware('auth:admin')->delete('/admin/equipment/{id}', [\App\Http\Controllers\AdminController::class, 'equipmentDestroy'])->name('admin.equipment.destroy');
 
-
 //admin user
 Route ::middleware('auth:admin')->get('/admin/users', [\App\Http\Controllers\AdminController::class, 'usersIndex'])->name('admin.users.index');  
 Route ::middleware('auth:admin')->delete('/admin/users/{id}', [\App\Http\Controllers\AdminController::class, 'usersDestroy'])->name('admin.users.destroy');
+
+//Admin Ruangan
+Route::middleware('auth:admin')->get('/facility_admin', [\App\Http\Controllers\AdminController::class, 'facility'])->name('facility_admin');
+Route::middleware('auth:admin')->get('/facility/{id}', [\App\Http\Controllers\AdminController::class, 'facilityDetail'])->name('facility.detail.admin');

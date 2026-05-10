@@ -21,7 +21,7 @@ class DashboardController extends Controller
         $today = now()->toDateString();
         
         $totalBooked = Peminjaman::where('id_peminjam', $user->id_peminjam)
-            ->whereIn('status_peminjaman', ['Disetujui', 'Pending'])
+            ->whereIn('status_peminjaman', ['Disetujui', 'Pending', 'Menghubungi Sarpras'])
             ->where('tanggal_peminjaman', '>=', $today)
             ->count();
         
@@ -77,7 +77,7 @@ class DashboardController extends Controller
 
         $approvedAndPendingBookings = Peminjaman::with('peminjam')
             ->where('id_fasilitas', $id)
-            ->whereIn('status_peminjaman', ['Disetujui', 'Pending'])
+            ->whereIn('status_peminjaman', ['Disetujui', 'Pending', 'Menghubungi Sarpras'])
             ->orderBy('tanggal_peminjaman', 'asc')
             ->orderBy('jam_mulai', 'asc')
             ->get();
@@ -152,7 +152,7 @@ $validated = $request->validate([
         
         // Ambil statistik
         $totalPeminjaman = Peminjaman::count();
-        $peminjamanbaru = Peminjaman::where('status_peminjaman', 'Pending')->count();
+        $peminjamanbaru = Peminjaman::whereIn('status_peminjaman', ['Pending', 'Menghubungi Sarpras'])->count();
         $peminjamanditerima = Peminjaman::where('status_peminjaman', 'Disetujui')->count();
         $peminjamanditolak = Peminjaman::where('status_peminjaman', 'Ditolak')->count();
         $totalFasilitas = Fasilitas_Kampus::count();
@@ -160,7 +160,7 @@ $validated = $request->validate([
         
         // Ambil pending peminjaman
         $pendingBookings = Peminjaman::with('peminjam', 'fasilitas')
-            ->where('status_peminjaman', 'Pending')
+            ->whereIn('status_peminjaman', ['Pending', 'Menghubungi Sarpras'])
             ->orderBy('tanggal_pengajuan', 'asc')
             ->limit(5)
             ->get();

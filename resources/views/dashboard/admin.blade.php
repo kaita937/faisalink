@@ -28,6 +28,7 @@
             <a href="{{ route('admin.facilities.index') }}" class="nav-link {{ request()->routeIs('admin.facilities.*') ? 'active' : '' }}">Fasilitas</a>
             <a href="{{ route('admin.equipment.index') }}" class="nav-link {{ request()->routeIs('admin.equipment.*') ? 'active' : '' }}">Perlengkapan</a>
             <a href="{{ route('admin.users.index') }}" class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">User</a>
+            <a href="{{ route('facility_admin') }}" class="nav-link {{ request()->routeIs('facility_admin') ? 'active' : '' }}">Ruangan</a>
         </nav>
         <div class="admin-info">
             <span>Welcome, {{ $admin->nama_admin }}</span>
@@ -103,7 +104,7 @@
                             <div class="request-info">
                                 <h3>{{ $booking->peminjam->nama_peminjam }} - {{ $booking->fasilitas->nama_fasilitas }}</h3>
                                 <p><strong>Keperluan:</strong> {{ $booking->keperluan }}</p>
-                                <p><strong>Tanggal:</strong> {{ \Carbon\Carbon::parse($booking->tanggal_peminjaman)->format('d/m/Y') }} | <strong>Waktu:</strong> {{ $booking->jam_mulai }} - {{ $booking->jam_selesai }}</p>
+                                <p><strong>Tanggal:</strong> {{ \Carbon\Carbon::parse($booking->tanggal_peminjaman)->format('d/m/Y') }}@if($booking->tanggal_selesai && $booking->tanggal_selesai != $booking->tanggal_peminjaman) - {{ \Carbon\Carbon::parse($booking->tanggal_selesai)->format('d/m/Y') }}@endif | <strong>Waktu:</strong> {{ $booking->jam_mulai }} - {{ $booking->jam_selesai }}</p>
                                 <p><strong>Lokasi:</strong> {{ $booking->fasilitas->lokasi_fasilitas }}</p>
                                 @if($booking->administrasi_peminjaman)
                                     <p><a href="{{ asset('storage/' . $booking->administrasi_peminjaman) }}" target="_blank" style="color:#2e66ff; text-decoration:none; font-weight:600;">&#128194; Lihat Proposal</a></p>

@@ -7,6 +7,7 @@ use App\Models\Peminjaman;
 use App\Models\Peminjam;
 use App\Models\PeminjamNotification;
 use App\Models\Fasilitas_Kampus;
+use App\Models\Review_Fasilitas;
 use App\Models\Perlengkapan_Fasilitas_Kampus;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -20,7 +21,7 @@ class AdminController extends Controller
     {
         $admin = Auth::guard('admin')->user();
         $status = $request->query('status', 'all');
-        $allowedStatuses = ['Pending', 'Disetujui', 'Ditolak'];
+        $allowedStatuses = ['Pending', 'Menghubungi Sarpras', 'Disetujui', 'Ditolak'];
 
         if (!in_array($status, $allowedStatuses, true)) {
             $status = 'all';
@@ -29,7 +30,9 @@ class AdminController extends Controller
         $bookingsQuery = Peminjaman::with(['peminjam', 'fasilitas'])
             ->orderBy('tanggal_pengajuan', 'desc');
 
-        if ($status !== 'all') {
+        if ($status === 'Pending') {
+            $bookingsQuery->whereIn('status_peminjaman', ['Pending', 'Menghubungi Sarpras']);
+        } elseif ($status !== 'all') {
             $bookingsQuery->where('status_peminjaman', $status);
         }
 
@@ -47,10 +50,10 @@ class AdminController extends Controller
         
         // Statistik untuk layout
         $totalPeminjaman = Peminjaman::count();
-        $peminjamanbaru = Peminjaman::where('status_peminjaman', 'Pending')->count();
+        $peminjamanbaru = Peminjaman::whereIn('status_peminjaman', ['Pending', 'Menghubungi Sarpras'])->count();
         $peminjamanditerima = Peminjaman::where('status_peminjaman', 'Disetujui')->count();
         $pendingBookings = Peminjaman::with('peminjam', 'fasilitas')
-            ->where('status_peminjaman', 'Pending')
+            ->whereIn('status_peminjaman', ['Pending', 'Menghubungi Sarpras'])
             ->orderBy('tanggal_pengajuan', 'asc')
             ->limit(5)
             ->get();
@@ -124,6 +127,26 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'Peminjaman telah ditolak dengan alasan.');
     }
 
+    /**
+     * Tandai booking sedang menghubungi Sarpras
+     */
+    public function contactSarpras(Request $request, $id)
+    {
+        $admin = Auth::guard('admin')->user();
+        $booking = Peminjaman::findOrFail($id);
+
+        if ($booking->status_peminjaman === 'Pending') {
+            $booking->update([
+                'status_peminjaman' => 'Menghubungi Sarpras',
+                'id_admin' => $admin->id_admin,
+            ]);
+        }
+
+        return response()->json([
+            'status' => $booking->status_peminjaman,
+        ]);
+    }
+
     public function uploadBuktiPeminjaman(Request $request, $id)
     {
         $request->validate([
@@ -155,10 +178,10 @@ class AdminController extends Controller
         
         // Statistik untuk layout
         $totalPeminjaman = Peminjaman::count();
-        $peminjamanbaru = Peminjaman::where('status_peminjaman', 'Pending')->count();
+        $peminjamanbaru = Peminjaman::whereIn('status_peminjaman', ['Pending', 'Menghubungi Sarpras'])->count();
         $peminjamanditerima = Peminjaman::where('status_peminjaman', 'Disetujui')->count();
         $pendingBookings = Peminjaman::with('peminjam', 'fasilitas')
-            ->where('status_peminjaman', 'Pending')
+            ->whereIn('status_peminjaman', ['Pending', 'Menghubungi Sarpras'])
             ->orderBy('tanggal_pengajuan', 'asc')
             ->limit(5)
             ->get();
@@ -172,10 +195,10 @@ class AdminController extends Controller
         
         // Statistik untuk layout
         $totalPeminjaman = Peminjaman::count();
-        $peminjamanbaru = Peminjaman::where('status_peminjaman', 'Pending')->count();
+        $peminjamanbaru = Peminjaman::whereIn('status_peminjaman', ['Pending', 'Menghubungi Sarpras'])->count();
         $peminjamanditerima = Peminjaman::where('status_peminjaman', 'Disetujui')->count();
         $pendingBookings = Peminjaman::with('peminjam', 'fasilitas')
-            ->where('status_peminjaman', 'Pending')
+            ->whereIn('status_peminjaman', ['Pending', 'Menghubungi Sarpras'])
             ->orderBy('tanggal_pengajuan', 'asc')
             ->limit(5)
             ->get();
@@ -205,10 +228,10 @@ class AdminController extends Controller
         
         // Statistik untuk layout
         $totalPeminjaman = Peminjaman::count();
-        $peminjamanbaru = Peminjaman::where('status_peminjaman', 'Pending')->count();
+        $peminjamanbaru = Peminjaman::whereIn('status_peminjaman', ['Pending', 'Menghubungi Sarpras'])->count();
         $peminjamanditerima = Peminjaman::where('status_peminjaman', 'Disetujui')->count();
         $pendingBookings = Peminjaman::with('peminjam', 'fasilitas')
-            ->where('status_peminjaman', 'Pending')
+            ->whereIn('status_peminjaman', ['Pending', 'Menghubungi Sarpras'])
             ->orderBy('tanggal_pengajuan', 'asc')
             ->limit(5)
             ->get();
@@ -247,10 +270,10 @@ class AdminController extends Controller
         
         // Statistik untuk layout
         $totalPeminjaman = Peminjaman::count();
-        $peminjamanbaru = Peminjaman::where('status_peminjaman', 'Pending')->count();
+        $peminjamanbaru = Peminjaman::whereIn('status_peminjaman', ['Pending', 'Menghubungi Sarpras'])->count();
         $peminjamanditerima = Peminjaman::where('status_peminjaman', 'Disetujui')->count();
         $pendingBookings = Peminjaman::with('peminjam', 'fasilitas')
-            ->where('status_peminjaman', 'Pending')
+            ->whereIn('status_peminjaman', ['Pending', 'Menghubungi Sarpras'])
             ->orderBy('tanggal_pengajuan', 'asc')
             ->limit(5)
             ->get();
@@ -266,10 +289,10 @@ class AdminController extends Controller
         
         // Statistik untuk layout
         $totalPeminjaman = Peminjaman::count();
-        $peminjamanbaru = Peminjaman::where('status_peminjaman', 'Pending')->count();
+        $peminjamanbaru = Peminjaman::whereIn('status_peminjaman', ['Pending', 'Menghubungi Sarpras'])->count();
         $peminjamanditerima = Peminjaman::where('status_peminjaman', 'Disetujui')->count();
         $pendingBookings = Peminjaman::with('peminjam', 'fasilitas')
-            ->where('status_peminjaman', 'Pending')
+            ->whereIn('status_peminjaman', ['Pending', 'Menghubungi Sarpras'])
             ->orderBy('tanggal_pengajuan', 'asc')
             ->limit(5)
             ->get();
@@ -285,10 +308,10 @@ class AdminController extends Controller
         
         // Statistik untuk layout
         $totalPeminjaman = Peminjaman::count();
-        $peminjamanbaru = Peminjaman::where('status_peminjaman', 'Pending')->count();
+        $peminjamanbaru = Peminjaman::whereIn('status_peminjaman', ['Pending', 'Menghubungi Sarpras'])->count();
         $peminjamanditerima = Peminjaman::where('status_peminjaman', 'Disetujui')->count();
         $pendingBookings = Peminjaman::with('peminjam', 'fasilitas')
-            ->where('status_peminjaman', 'Pending')
+            ->whereIn('status_peminjaman', ['Pending', 'Menghubungi Sarpras'])
             ->orderBy('tanggal_pengajuan', 'asc')
             ->limit(5)
             ->get();
@@ -323,10 +346,10 @@ class AdminController extends Controller
         
         // Statistik untuk layout
         $totalPeminjaman = Peminjaman::count();
-        $peminjamanbaru = Peminjaman::where('status_peminjaman', 'Pending')->count();
+        $peminjamanbaru = Peminjaman::whereIn('status_peminjaman', ['Pending', 'Menghubungi Sarpras'])->count();
         $peminjamanditerima = Peminjaman::where('status_peminjaman', 'Disetujui')->count();
         $pendingBookings = Peminjaman::with('peminjam', 'fasilitas')
-            ->where('status_peminjaman', 'Pending')
+            ->whereIn('status_peminjaman', ['Pending', 'Menghubungi Sarpras'])
             ->orderBy('tanggal_pengajuan', 'asc')
             ->limit(5)
             ->get();
@@ -380,6 +403,46 @@ class AdminController extends Controller
 
         return redirect()->route('admin.users.index')->with('success', 'User berhasil dihapus.');
     }
-
     
+    public function facility($category = null)
+    {
+        $admin = Auth::guard('admin')->user();
+        $user = Auth::guard('peminjam')->user();
+        $fasilitas = Fasilitas_Kampus::query()
+            ->withAvg('reviews as average_rating', 'rating')
+            ->withCount('reviews')
+            ->get();
+        $initialCategory = $category;
+
+        return view('dashboard.facility_admin', compact('admin', 'user', 'fasilitas', 'initialCategory'));
+    }
+
+    public function facilityDetail($id)
+    {
+        $admin = Auth::guard('admin')->user();
+        $user = Auth::guard('peminjam')->user();
+        $fasilitas = Fasilitas_Kampus::with('perlengkapan')->findOrFail($id);
+
+        $approvedAndPendingBookings = Peminjaman::with('peminjam')
+            ->where('id_fasilitas', $id)
+            ->whereIn('status_peminjaman', ['Disetujui', 'Pending', 'Menghubungi Sarpras'])
+            ->orderBy('tanggal_peminjaman', 'asc')
+            ->orderBy('jam_mulai', 'asc')
+            ->get();
+
+        $reviews = Review_Fasilitas::with('peminjam')
+            ->where('id_fasilitas', $id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $averageRating = $reviews->avg('rating');
+        $reviewsCount = $reviews->count();
+
+        return view('dashboard.facility_detail_admin', compact('admin', 'user', 'fasilitas', 'approvedAndPendingBookings', 'reviews', 'averageRating', 'reviewsCount'));
+        $notifications = \App\Models\PeminjamNotification::where('id_peminjam', $user->id_peminjam)->orderBy('created_at', 'desc')->get();
+        $unreadCount = $notifications->whereNull('read_at')->count();
+
+        return view('dasboard.facility_detail_admin', compact('admin', 'user', 'fasilitas', 'approvedAndPendingBookings', 'reviews', 'averageRating', 'reviewsCount', 'notifications', 'unreadCount'));
+    }
+
 }
