@@ -87,6 +87,7 @@
                 'ditolak', 'rejected' => 'status-rejected',
                 'dibatalkan', 'cancelled' => 'status-cancelled',
                 'selesai', 'done' => 'status-done',
+                'menghubungi sarpras' => 'status-contacting',
                 default => 'status-pending',
             };
         @endphp

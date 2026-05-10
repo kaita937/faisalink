@@ -100,6 +100,22 @@ header {
     letter-spacing: 0.5px;
 }
 
+.status-badge.status-approved {
+    background-color: #34a853;
+}
+
+.status-badge.status-pending {
+    background-color: #f59e0b;
+}
+
+.status-badge.status-rejected {
+    background-color: #d93025;
+}
+
+.status-badge.status-contacting {
+    background-color: #2563eb;
+}
+
 .card-body {
     padding: 30px;
 }

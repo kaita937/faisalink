@@ -26,9 +26,8 @@
         <div class="mb-4">
             <label for="status_fasilitas" class="block text-gray-700 text-sm font-bold mb-2">Status Fasilitas</label>
             <select name="status_fasilitas" id="status_fasilitas" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-                <option value="Tersedia" {{ $facility->status_fasilitas == 'Tersedia' ? 'selected' : '' }}>Tersedia</option>
-                <option value="Tidak Tersedia" {{ $facility->status_fasilitas == 'Tidak Tersedia' ? 'selected' : '' }}>Tidak Tersedia</option>
-                <option value="Dalam Perbaikan" {{ $facility->status_fasilitas == 'Dalam Perbaikan' ? 'selected' : '' }}>Dalam Perbaikan</option>
+                <option value="tersedia" {{ $facility->status_fasilitas == 'tersedia' ? 'selected' : '' }}>tersedia</option>
+                <option value="maintenance" {{ $facility->status_fasilitas == 'maintenance' ? 'selected' : '' }}>maintenance</option>
             </select>
         </div>
 

@@ -6,17 +6,31 @@
     <title>Facilities - Faisalink</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/facility.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/facility-admin.css') }}">
 </head>
 <body>
 
     <!-- Header -->
-    <x-user-nav search-input-id="searchInput" />
-                    </div>
-                </div>
-            </div>
+    <header>
+        <a href="{{ route('dashboard.admin') }}" class="logo-section">
+            <img src="{{ asset('Icon/logo.png') }}" alt="Faisalink">
+            <span>Faisalink Admin</span>
+        </a>
+        <nav class="admin-nav">
+            <a href="{{ route('dashboard.admin') }}" class="nav-link {{ request()->routeIs('dashboard.admin') ? 'active' : '' }}">Dashboard</a>
+            <a href="{{ route('admin.facilities.index') }}" class="nav-link {{ request()->routeIs('admin.facilities.*') ? 'active' : '' }}">Fasilitas</a>
+            <a href="{{ route('admin.equipment.index') }}" class="nav-link {{ request()->routeIs('admin.equipment.*') ? 'active' : '' }}">Perlengkapan</a>
+            <a href="{{ route('admin.users.index') }}" class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">User</a>
+            <a href="{{ route('facility_admin') }}" class="nav-link {{ request()->routeIs('facility_admin') ? 'active' : '' }}">Ruangan</a>
+        </nav>
+        <div class="admin-info">
+            <span>Welcome, {{ $admin->nama_admin }}</span>
+            <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                @csrf
+                <button type="submit" class="btn btn-logout">Logout</button>
+            </form>
         </div>
-    </header>
+    </header>   
 
     <!-- Main Content -->
     <div class="main-container">
@@ -34,9 +48,9 @@
                 <button class="filter-btn" data-category="sport">Sport</button>
                 <button class="filter-btn" data-category="hall">Hall</button>
                 <button class="filter-btn" data-category="meeting">Meeting</button>
+                <button class="filter-btn" data-category="classroom">Classroom</button>
                 <button class="filter-btn" data-category="library">Library</button>
                 <button class="filter-btn" data-category="studio">Studio</button>
-                <button class="filter-btn" data-category="other">Other</button>
             </div>
         </div>
 
@@ -106,7 +120,7 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <a href="{{ route('facility.detail', $f->id_fasilitas) }}" class="btn-detail">Detail</a>
+                        <a href="{{ route('facility.detail.admin', $f->id_fasilitas) }}" class="btn-detail">Detail</a>
                     </div>
                 </div>
             @empty
@@ -121,13 +135,7 @@
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2026 Faisalink - Smart Facility Booking System</p>
-        <div style="display: flex; justify-content: center; gap: 20px; margin-top: 15px;">
-            <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                @csrf
-            </form>
-        </div>
+        <p>&copy; 2026 Faisalink - Smart Facility Booking System | Admin Panel</p>
     </footer>
 
     <script>

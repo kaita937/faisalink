@@ -444,6 +444,12 @@ header {
         color: #16a34a;
     }
     .badge-approved .dot { background-color: #22c55e; }
+
+    .badge-contacting {
+        background-color: #dbeafe;
+        color: #2563eb;
+    }
+    .badge-contacting .dot { background-color: #3b82f6; }
     
     .badge-past {
         background-color: #d3d3d3;

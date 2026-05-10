@@ -41,6 +41,8 @@
                 <!-- Status Badge -->
                 @if($booking->status_peminjaman == 'Pending')
                     <div class="badge badge-pending"><div class="dot"></div>Pending</div>
+                @elseif($booking->status_peminjaman == 'Menghubungi Sarpras')
+                    <div class="badge badge-contacting"><div class="dot"></div>Menghubungi Sarpras</div>
                 @else
                     <div class="badge badge-approved"><div class="dot"></div>Approved</div>
                 @endif

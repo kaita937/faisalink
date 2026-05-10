@@ -16,7 +16,7 @@ class BookingViewController extends Controller
 
         $upcomingBookings = Peminjaman::with('fasilitas')
             ->where('id_peminjam', $userId)
-            ->whereIn('status_peminjaman', ['Pending', 'Disetujui'])
+            ->whereIn('status_peminjaman', ['Pending', 'Menghubungi Sarpras', 'Disetujui'])
             ->orderBy('tanggal_peminjaman', 'asc') // Urutkan dari jadwal terdekat
             ->get();
 

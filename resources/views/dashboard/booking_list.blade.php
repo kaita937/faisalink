@@ -48,6 +48,8 @@
                             $badgeClass = '';
                             if ($booking->status_peminjaman === 'Pending') {
                                 $badgeClass = 'pending';
+                            } elseif ($booking->status_peminjaman === 'Menghubungi Sarpras') {
+                                $badgeClass = 'contacting';
                             } elseif ($booking->status_peminjaman === 'Disetujui') {
                                 $badgeClass = 'approved';
                             } elseif ($booking->status_peminjaman === 'Ditolak') {
@@ -59,7 +61,7 @@
                                 <h3>{{ $booking->peminjam->nama_peminjam }} - {{ $booking->fasilitas->nama_fasilitas }}</h3>
                                 <p><strong>Status:</strong> <span class="status-badge {{ $badgeClass }}">{{ $booking->status_peminjaman }}</span></p>
                                 <p><strong>Keperluan:</strong> {{ $booking->keperluan }}</p>
-                                <p><strong>Tanggal:</strong> {{ \Carbon\Carbon::parse($booking->tanggal_peminjaman)->format('d/m/Y') }} | <strong>Waktu:</strong> {{ $booking->jam_mulai }} - {{ $booking->jam_selesai }}</p>
+                                <p><strong>Tanggal:</strong> {{ \Carbon\Carbon::parse($booking->tanggal_peminjaman)->format('d/m/Y') }}@if($booking->tanggal_selesai && $booking->tanggal_selesai != $booking->tanggal_peminjaman) - {{ \Carbon\Carbon::parse($booking->tanggal_selesai)->format('d/m/Y') }}@endif | <strong>Waktu:</strong> {{ $booking->jam_mulai }} - {{ $booking->jam_selesai }}</p>
                                 <p><strong>Lokasi:</strong> {{ $booking->fasilitas->lokasi_fasilitas }}</p>
                                 @if($booking->administrasi_peminjaman)
                                     <p><a href="{{ asset('storage/' . $booking->administrasi_peminjaman) }}" target="_blank" style="color:#2e66ff; text-decoration:none; font-weight:600;">Lihat Proposal</a></p>

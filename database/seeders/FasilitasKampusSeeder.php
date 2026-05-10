@@ -12,6 +12,7 @@ class FasilitasKampusSeeder extends Seeder
         DB::table('Fasilitas_Kampus')->insert([
             [
                 'nama_fasilitas' => 'Ruang Seminar A',
+                'category' => 'Hall',
                 'lokasi_fasilitas' => 'Gedung Akademik Lt. 2',
                 'kapasitas' => 50,
                 'status_fasilitas' => 'Tersedia',
@@ -19,6 +20,7 @@ class FasilitasKampusSeeder extends Seeder
             ],
             [
                 'nama_fasilitas' => 'Ruang Seminar B',
+                'category' => 'Hall',
                 'lokasi_fasilitas' => 'Gedung Akademik Lt. 2',
                 'kapasitas' => 30,
                 'status_fasilitas' => 'Tersedia',
@@ -26,6 +28,7 @@ class FasilitasKampusSeeder extends Seeder
             ],
             [
                 'nama_fasilitas' => 'Laboratorium Komputer',
+                'category' => 'Laboratory',
                 'lokasi_fasilitas' => 'Gedung IT Lt. 1',
                 'kapasitas' => 40,
                 'status_fasilitas' => 'Tersedia',
@@ -33,6 +36,7 @@ class FasilitasKampusSeeder extends Seeder
             ],
             [
                 'nama_fasilitas' => 'Perpustakaan Digital',
+                'category' => 'Library',
                 'lokasi_fasilitas' => 'Gedung Pusat Lt. 3',
                 'kapasitas' => 100,
                 'status_fasilitas' => 'Tersedia',
@@ -40,6 +44,7 @@ class FasilitasKampusSeeder extends Seeder
             ],
             [
                 'nama_fasilitas' => 'Lapangan Olahraga',
+                'category' => 'Sport',
                 'lokasi_fasilitas' => 'Area Terbuka',
                 'kapasitas' => 200,
                 'status_fasilitas' => 'Tersedia',
@@ -47,6 +52,7 @@ class FasilitasKampusSeeder extends Seeder
             ],
             [
                 'nama_fasilitas' => 'Ruang Meeting VIP',
+                'category' => 'Meeting',
                 'lokasi_fasilitas' => 'Gedung Akademik Lt. 3',
                 'kapasitas' => 20,
                 'status_fasilitas' => 'Tersedia',
@@ -54,11 +60,20 @@ class FasilitasKampusSeeder extends Seeder
             ],
             [
                 'nama_fasilitas' => 'Studio Rekaman',
+                'category' => 'Studio',
                 'lokasi_fasilitas' => 'Gedung Seni Lt. 2',
                 'kapasitas' => 15,
                 'status_fasilitas' => 'Tersedia',
                 'deskripsi' => 'Studio rekaman profesional untuk mahasiswa',
             ],
+                [
+                    'nama_fasilitas' => 'Ruang Kelas 101',
+                    'category' => 'Other',
+                    'lokasi_fasilitas' => 'Gedung Akademik Lt. 1',
+                    'kapasitas' => 60,
+                    'status_fasilitas' => 'maintenance',
+                    'deskripsi' => 'Ruang kelas standar untuk perkuliahan',
+                ],
         ]);
     }
 }
