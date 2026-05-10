@@ -54,7 +54,12 @@
                         <line x1="8" y1="2" x2="8" y2="6"></line>
                         <line x1="3" y1="10" x2="21" y2="10"></line>
                     </svg>
-                    <span>{{ $booking->tanggal_peminjaman }}</span>
+                    <span>
+                        {{ \Carbon\Carbon::parse($booking->tanggal_peminjaman)->format('d/m/Y') }}
+                        @if($booking->tanggal_selesai && $booking->tanggal_selesai != $booking->tanggal_peminjaman)
+                            - {{ \Carbon\Carbon::parse($booking->tanggal_selesai)->format('d/m/Y') }}
+                        @endif
+                    </span>
                 </div>
                 <div class="info-row">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -102,7 +107,12 @@
                         <line x1="8" y1="2" x2="8" y2="6"></line>
                         <line x1="3" y1="10" x2="21" y2="10"></line>
                     </svg>
-                    <span>{{ $booking->tanggal_peminjaman }}</span>
+                    <span>
+                        {{ \Carbon\Carbon::parse($booking->tanggal_peminjaman)->format('d/m/Y') }}
+                        @if($booking->tanggal_selesai && $booking->tanggal_selesai != $booking->tanggal_peminjaman)
+                            - {{ \Carbon\Carbon::parse($booking->tanggal_selesai)->format('d/m/Y') }}
+                        @endif
+                    </span>
                 </div>
                 <div class="info-row">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -148,7 +158,12 @@
                         <line x1="8" y1="2" x2="8" y2="6"></line>
                         <line x1="3" y1="10" x2="21" y2="10"></line>
                     </svg>
-                    <span>{{ $booking->tanggal_peminjaman }}</span>
+                    <span>
+                        {{ \Carbon\Carbon::parse($booking->tanggal_peminjaman)->format('d/m/Y') }}
+                        @if($booking->tanggal_selesai && $booking->tanggal_selesai != $booking->tanggal_peminjaman)
+                            - {{ \Carbon\Carbon::parse($booking->tanggal_selesai)->format('d/m/Y') }}
+                        @endif
+                    </span>
                 </div>
                 <div class="info-row">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">

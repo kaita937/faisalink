@@ -51,12 +51,21 @@
                         <input type="text" class="form-control" value="{{ $fasilitas->nama_fasilitas }} ({{ $fasilitas->lokasi_fasilitas }})" readonly>
                     </div>
 
-                    <div class="form-group">
-                        <label class="form-label" for="tanggal_peminjaman">Tanggal Peminjaman</label>
-                        <input type="date" name="tanggal_peminjaman" id="tanggal_peminjaman" class="form-control" value="{{ old('tanggal_peminjaman') }}" required min="{{ date('Y-m-d') }}">
-                        @error('tanggal_peminjaman')
-                            <div class="error-message">{{ $message }}</div>
-                        @enderror
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label class="form-label" for="tanggal_peminjaman">Tanggal Mulai</label>
+                            <input type="date" name="tanggal_peminjaman" id="tanggal_peminjaman" class="form-control" value="{{ old('tanggal_peminjaman') }}" required min="{{ date('Y-m-d') }}">
+                            @error('tanggal_peminjaman')
+                                <div class="error-message">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="tanggal_selesai">Tanggal Selesai</label>
+                            <input type="date" name="tanggal_selesai" id="tanggal_selesai" class="form-control" value="{{ old('tanggal_selesai') }}" required min="{{ date('Y-m-d') }}">
+                            @error('tanggal_selesai')
+                                <div class="error-message">{{ $message }}</div>
+                            @enderror
+                        </div>
                     </div>
 
                     <div class="grid-2">
