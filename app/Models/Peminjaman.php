@@ -16,6 +16,7 @@ class Peminjaman extends Model
         'id_admin',
         'tanggal_pengajuan',
         'tanggal_peminjaman',
+        'tanggal_selesai',
         'jam_mulai',
         'jam_selesai',
         'status_peminjaman',

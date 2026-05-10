@@ -29,6 +29,7 @@ class BookingController extends Controller
         $request->validate([
             'id_fasilitas' => 'required|exists:Fasilitas_Kampus,id_fasilitas',
             'tanggal_peminjaman' => 'required|date|after_or_equal:today',
+            'tanggal_selesai' => 'required|date|after_or_equal:tanggal_peminjaman',
             'jam_mulai' => 'required|date_format:H:i',
             'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
             'keperluan' => 'required|string',
@@ -59,10 +60,29 @@ class BookingController extends Controller
          */
         $conflict = Peminjaman::where('id_fasilitas', $fasilitas->id_fasilitas)
             ->whereIn('status_peminjaman', ['Pending', 'Disetujui'])
-            ->where('tanggal_peminjaman', $request->tanggal_peminjaman)
             ->where(function ($query) use ($request) {
-                $query->where('jam_mulai', '<', $request->jam_selesai)
-                    ->where('jam_selesai', '>', $request->jam_mulai);
+                $query->where(function ($q) use ($request) {
+                    // Cek jika range tanggal beririsan
+                    $q->where('tanggal_peminjaman', '<=', $request->tanggal_selesai)
+                      ->where('tanggal_selesai', '>=', $request->tanggal_peminjaman);
+                })->where(function ($q) use ($request) {
+                    // Jika tanggalnya sama, cek jam
+                    // Jika tanggal berbeda, asumsikan peminjaman seharian (conflict jika ada overlap tanggal)
+                    // Namun untuk lebih presisi, kita cek jam hanya jika overlapnya di hari yang sama di batas awal/akhir
+                    $q->where(function($sub) use ($request) {
+                        $sub->where('tanggal_peminjaman', '<', $request->tanggal_selesai)
+                            ->orWhere(function($ss) use ($request) {
+                                $ss->where('tanggal_peminjaman', $request->tanggal_selesai)
+                                   ->where('jam_mulai', '<', $request->jam_selesai);
+                            });
+                    })->where(function($sub) use ($request) {
+                        $sub->where('tanggal_selesai', '>', $request->tanggal_peminjaman)
+                            ->orWhere(function($ss) use ($request) {
+                                $ss->where('tanggal_selesai', $request->tanggal_peminjaman)
+                                   ->where('jam_selesai', '>', $request->jam_mulai);
+                            });
+                    });
+                });
             })
             ->exists();
 
@@ -88,6 +108,7 @@ class BookingController extends Controller
             'id_admin' => null,
             'tanggal_pengajuan' => now()->toDateString(),
             'tanggal_peminjaman' => $request->tanggal_peminjaman,
+            'tanggal_selesai' => $request->tanggal_selesai,
             'jam_mulai' => $request->jam_mulai,
             'jam_selesai' => $request->jam_selesai,
             'status_peminjaman' => 'Pending',

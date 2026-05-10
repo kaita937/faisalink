@@ -117,7 +117,12 @@
                     </div>
                     <div class="info-item">
                         <h4>Tanggal Peminjaman</h4>
-                        <p>{{ \Carbon\Carbon::parse($booking->tanggal_peminjaman)->translatedFormat('l, d F Y') }}</p>
+                        <p>
+                            {{ \Carbon\Carbon::parse($booking->tanggal_peminjaman)->translatedFormat('d F Y') }}
+                            @if($booking->tanggal_selesai && $booking->tanggal_selesai != $booking->tanggal_peminjaman)
+                                - {{ \Carbon\Carbon::parse($booking->tanggal_selesai)->translatedFormat('d F Y') }}
+                            @endif
+                        </p>
                     </div>
                     <div class="info-item">
                         <h4>Waktu Peminjaman</h4>
